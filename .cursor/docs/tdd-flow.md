@@ -1,3 +1,9 @@
+---
+description: TDD Flow 가이드라인
+globs:
+alwaysApply: true
+---
+
 # 🧪 TDD Flow Guide
 
 ## 1️⃣ 테스트 작성 (Red)

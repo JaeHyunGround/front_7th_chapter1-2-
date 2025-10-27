@@ -1,3 +1,9 @@
+---
+description: 테스트 코드 작성 가이드라인
+globs:
+alwaysApply: true
+---
+
 # 🧪 테스트 코드 작성 가이드라인
 
 이 문서는 **TDD(Test Driven Development)** 및 **테스트 코드** 작성 시 준수해야 할 원칙을 정의한다.  
