@@ -1,6 +1,6 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useMemo, useState } from 'react';
 
-import { Event, RepeatType } from '../types';
+import { Event, RepeatInfo, RepeatType } from '../types';
 import { getTimeErrorMessage } from '../utils/timeValidation';
 
 type TimeErrorRecord = Record<'startTimeError' | 'endTimeError', string | null>;
@@ -25,6 +25,48 @@ export const useEventForm = (initialEvent?: Event) => {
     startTimeError: null,
     endTimeError: null,
   });
+
+  // interval 유효성 검증
+  const intervalError = useMemo(() => {
+    if (!isRepeating) return null;
+
+    if (repeatInterval < 1) {
+      return '반복 간격은 1 이상이어야 합니다.';
+    }
+
+    if (!Number.isInteger(repeatInterval)) {
+      return '반복 간격은 정수여야 합니다.';
+    }
+
+    return null;
+  }, [isRepeating, repeatInterval]);
+
+  // endDate 유효성 검증
+  const endDateError = useMemo(() => {
+    if (!isRepeating) return null;
+    if (repeatEndDate === '') return null;
+
+    // YYYY-MM-DD 포맷 검증
+    const dateFormatRegex = /^\d{4}-\d{2}-\d{2}$/;
+    if (!dateFormatRegex.test(repeatEndDate)) {
+      return '날짜 형식이 올바르지 않습니다. (YYYY-MM-DD)';
+    }
+
+    // 유효한 날짜인지 검증
+    const date = new Date(repeatEndDate);
+    const [year, month, day] = repeatEndDate.split('-').map(Number);
+
+    if (
+      isNaN(date.getTime()) ||
+      date.getFullYear() !== year ||
+      date.getMonth() + 1 !== month ||
+      date.getDate() !== day
+    ) {
+      return '유효하지 않은 날짜입니다.';
+    }
+
+    return null;
+  }, [isRepeating, repeatEndDate]);
 
   const handleStartTimeChange = (e: ChangeEvent<HTMLInputElement>) => {
     const newStartTime = e.target.value;
@@ -69,6 +111,22 @@ export const useEventForm = (initialEvent?: Event) => {
     setNotificationTime(event.notificationTime);
   };
 
+  const getRepeatInfo = (): RepeatInfo => {
+    if (!isRepeating) {
+      return {
+        type: 'none',
+        interval: 1,
+        endDate: undefined,
+      };
+    }
+
+    return {
+      type: repeatType,
+      interval: repeatInterval,
+      endDate: repeatEndDate || undefined,
+    };
+  };
+
   return {
     title,
     setTitle,
@@ -102,5 +160,8 @@ export const useEventForm = (initialEvent?: Event) => {
     handleEndTimeChange,
     resetForm,
     editEvent,
+    getRepeatInfo,
+    intervalError,
+    endDateError,
   };
 };
