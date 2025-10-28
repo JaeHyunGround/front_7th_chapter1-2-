@@ -163,11 +163,11 @@ description:
 
 ## 6. 산출물 경로 인터페이스
 
-| 문서 종류 | 경로                                    | 생성 주체    | 사용 주체     |
-| --------- | --------------------------------------- | ------------ | ------------- |
-| PRD       | `.cursor/spec/prd.md`                   | Analyst      | Architect, QA |
-| Epic      | `.cursor/spec/epics/*.md`               | Analyst      | Scrum Master  |
-| Story     | `.cursor/spec/stories/<epic-slug>/*.md` | Scrum Master | Developer, QA |
+| 문서 종류 | 경로                                    | 생성 주체               | 사용 주체              |
+| --------- | --------------------------------------- | ----------------------- | ---------------------- |
+| PRD       | `.cursor/spec/prd.md`                   | Analyst (Doeun)         | Architect (Haneul), QA |
+| Epic      | `.cursor/spec/epics/*.md`               | Analyst (Doeun)         | Scrum Master           |
+| Story     | `.cursor/spec/stories/<epic-slug>/*.md` | Scrum Master (Taeyoung) | Developer, QA          |
 
 ---
 
@@ -213,7 +213,7 @@ description:
 | ---- | --------------------------- | -------------------------- | ---------------------- |
 | 1    | **Analyst (Doeun)**         | PRD, Epics                 | 요구사항 및 기능 정의  |
 | 2    | **Scrum Master (Taeyoung)** | Stories                    | 구현 가능한 단위 분해  |
-| 3    | **Architect**               | 테스트 시나리오, 설계 문서 | 기술 설계 및 품질 보증 |
+| 3    | **Architect (Haneul)**      | 테스트 시나리오, 설계 문서 | 기술 설계 및 품질 보증 |
 | 4    | **QA**                      | 리뷰, 리팩토링 로그        | 품질 검증 및 피드백    |
 
 ---
