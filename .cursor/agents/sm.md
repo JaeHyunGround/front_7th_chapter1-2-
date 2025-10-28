@@ -116,9 +116,9 @@ description:
   - [기타] : 테스트, 데이터, 리소스, UI/UX 등 추가 확인 필요 사항
 - 각 오픈 이슈는 **담당 확인자 또는 해결 필요 항목**을 함께 기록
   - 예:
-    - [기능 미정] 반복 규칙 세부 정의 필요 (담당: Doeun(Analyst))
-    - [의존성 미정] Story-B 선행 필요 여부 확인 (담당: Developer)
-    - [우선순위 미정] Epic 내 Story 순서 조정 필요 (담당: Taeyoung(SM))
+    - [기능 미정] 반복 규칙 세부 정의 필요 (담당: Analyst(Doeun))
+    - [의존성 미정] Story-B 선행 필요 여부 확인 (담당: Developer(Yeongseo))
+    - [우선순위 미정] Epic 내 Story 순서 조정 필요 (담당: SM(Taeyoung))
 
 ## 8. 참고/근거
 
@@ -163,11 +163,11 @@ description:
 
 ## 6. 산출물 경로 인터페이스
 
-| 문서 종류 | 경로                                    | 생성 주체               | 사용 주체              |
-| --------- | --------------------------------------- | ----------------------- | ---------------------- |
-| PRD       | `.cursor/spec/prd.md`                   | Analyst (Doeun)         | Architect (Haneul), QA |
-| Epic      | `.cursor/spec/epics/*.md`               | Analyst (Doeun)         | Scrum Master           |
-| Story     | `.cursor/spec/stories/<epic-slug>/*.md` | Scrum Master (Taeyoung) | Developer, QA          |
+| 문서 종류 | 경로                                    | 생성 주체               | 사용 주체                |
+| --------- | --------------------------------------- | ----------------------- | ------------------------ |
+| PRD       | `.cursor/spec/prd.md`                   | Analyst (Doeun)         | Architect (Haneul), QA   |
+| Epic      | `.cursor/spec/epics/*.md`               | Analyst (Doeun)         | Scrum Master (Taeyoung)  |
+| Story     | `.cursor/spec/stories/<epic-slug>/*.md` | Scrum Master (Taeyoung) | Developer (Yeongseo), QA |
 
 ---
 
