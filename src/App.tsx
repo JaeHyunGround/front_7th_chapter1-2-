@@ -135,7 +135,7 @@ function App() {
   const [isOverlapDialogOpen, setIsOverlapDialogOpen] = useState(false);
   const [overlappingEvents, setOverlappingEvents] = useState<Event[]>([]);
   const [isEditConfirmOpen, setIsEditConfirmOpen] = useState(false);
-  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
+  const [pendingDeleteEvent, setPendingDeleteEvent] = useState<Event | null>(null);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -729,8 +729,8 @@ function App() {
                     <IconButton
                       aria-label="Delete event"
                       onClick={() => {
-                        if (event.repeat.type !== 'none') {
-                          setIsDeleteConfirmOpen(true);
+                        if (isRepeatingType(event.repeat.type)) {
+                          setPendingDeleteEvent(event);
                           return;
                         }
                         deleteEvent(event.id);
@@ -804,7 +804,7 @@ function App() {
       </Dialog>
 
       {/* 반복 일정 삭제 확인 모달 */}
-      <Dialog open={isDeleteConfirmOpen} onClose={() => setIsDeleteConfirmOpen(false)}>
+      <Dialog open={Boolean(pendingDeleteEvent)} onClose={() => setPendingDeleteEvent(null)}>
         <DialogTitle>해당 일정만 삭제하시겠어요?</DialogTitle>
         <DialogContent>
           <DialogContentText>
@@ -812,8 +812,8 @@ function App() {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setIsDeleteConfirmOpen(false)}>예</Button>
-          <Button onClick={() => setIsDeleteConfirmOpen(false)}>아니오</Button>
+          <Button onClick={() => setPendingDeleteEvent(null)}>예</Button>
+          <Button onClick={() => setPendingDeleteEvent(null)}>아니오</Button>
         </DialogActions>
       </Dialog>
 
