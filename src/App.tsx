@@ -134,6 +134,7 @@ function App() {
 
   const [isOverlapDialogOpen, setIsOverlapDialogOpen] = useState(false);
   const [overlappingEvents, setOverlappingEvents] = useState<Event[]>([]);
+  const [isEditConfirmOpen, setIsEditConfirmOpen] = useState(false);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -175,6 +176,16 @@ function App() {
       repeat: getRepeatInfo(),
       notificationTime,
     };
+
+    // 편집 중이며 반복 일정인 경우 확인 모달 노출
+    if (
+      editingEvent &&
+      ((editingEvent.repeat && editingEvent.repeat.type !== 'none') ||
+        eventData.repeat.type !== 'none')
+    ) {
+      setIsEditConfirmOpen(true);
+      return;
+    }
 
     const shouldCheckOverlap = eventData.repeat.type === 'none';
     if (shouldCheckOverlap) {
@@ -687,6 +698,21 @@ function App() {
           >
             계속 진행
           </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* 반복 일정 편집 확인 모달 */}
+      <Dialog open={isEditConfirmOpen} onClose={() => setIsEditConfirmOpen(false)}>
+        <DialogTitle>해당 일정만 수정하시겠어요?</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            단일 수정 시 해당 일정만 변경되고 반복에서 분리됩니다. 전체 수정을 선택하면 반복 일정 전체가 변경됩니다.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setIsEditConfirmOpen(false)}>예</Button>
+          <Button onClick={() => setIsEditConfirmOpen(false)}>아니오</Button>
+          <Button onClick={() => setIsEditConfirmOpen(false)}>취소</Button>
         </DialogActions>
       </Dialog>
 
