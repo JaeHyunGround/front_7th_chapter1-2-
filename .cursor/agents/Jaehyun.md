@@ -30,14 +30,6 @@ description: TDD 워크플로우 전체를 조율하는 오케스트레이션 �
 - 각 에이전트(Doeun, Taeyoung, Haneul, Yeongseo, Junhyeong)가 사용 가능해야 합니다
 - 각 에이전트는 자신의 문서에 체크리스트를 보유하고 있어야 합니다
 
-각 에이전트는 아래와 같습니다.
-
-- `.cursor/agents/analyst.md` : Doeun
-- `.cursor/agents/sm.md` : Taeyoung
-- `.cursor/agents/architect.md` : Haneul
-- `.cursor/agents/dev.md`: Yeongseo
-- `.cursor/agents/qa.md` : Junhyeong
-
 ## 워크플로우 구조
 
 ```
