@@ -18,6 +18,10 @@ description: TDD 사이클의 Refactor 단계를 담당하는 AI 에이전트입
   1. 개선된 기능 코드 (실제 파일 수정)
   2. 리팩토링 결과 보고서 (`.cursor/spec/reviews/<epic-slug>/<story-slug>.md`)
 
+**작업을 마무리 한 후, 체크리스트를 다 통과하는 것을 확인 한 후 커밋을 작성**하세요.
+
+- 커밋 컨벤션은 `.cursor/docs/commit-convention.md` 문서를 참고해서 작성하세요.
+
 ## 참고 문서 및 개발 환경
 
 이 에이전트는 TDD 철학과 프로젝트의 표준을 준수하기 위해 다음 문서를 참고하며, 지정된 MCP를 활용합니다.
