@@ -4,6 +4,7 @@ import Close from '@mui/icons-material/Close';
 import Delete from '@mui/icons-material/Delete';
 import Edit from '@mui/icons-material/Edit';
 import Notifications from '@mui/icons-material/Notifications';
+import Repeat from '@mui/icons-material/Repeat';
 import {
   Alert,
   AlertTitle,
@@ -216,6 +217,13 @@ function App() {
                           >
                             <Stack direction="row" spacing={1} alignItems="center">
                               {isNotified && <Notifications fontSize="small" />}
+                              {event.repeat?.type && event.repeat.type !== 'none' && (
+                                <Repeat
+                                  fontSize="small"
+                                  data-testid="repeat-icon"
+                                  aria-label="반복 일정"
+                                />
+                              )}
                               <Typography
                                 variant="caption"
                                 noWrap
@@ -306,6 +314,13 @@ function App() {
                                 >
                                   <Stack direction="row" spacing={1} alignItems="center">
                                     {isNotified && <Notifications fontSize="small" />}
+                                    {event.repeat?.type && event.repeat.type !== 'none' && (
+                                      <Repeat
+                                        fontSize="small"
+                                        data-testid="repeat-icon"
+                                        aria-label="반복 일정"
+                                      />
+                                    )}
                                     <Typography
                                       variant="caption"
                                       noWrap
