@@ -148,6 +148,8 @@ function App() {
     }
   }, [events, setCurrentDate]);
 
+  const isRepeatingType = (type: RepeatType) => type !== 'none';
+
   const addOrUpdateEvent = async () => {
     if (!title || !date || !startTime || !endTime) {
       enqueueSnackbar('필수 정보를 모두 입력해주세요.', { variant: 'error' });
@@ -177,12 +179,8 @@ function App() {
       notificationTime,
     };
 
-    // 편집 중이며 반복 일정인 경우 확인 모달 노출
-    if (
-      editingEvent &&
-      ((editingEvent.repeat && editingEvent.repeat.type !== 'none') ||
-        eventData.repeat.type !== 'none')
-    ) {
+    // 편집 중이며 기존 이벤트가 반복 일정인 경우 확인 모달 노출
+    if (editingEvent && isRepeatingType(editingEvent.repeat.type)) {
       setIsEditConfirmOpen(true);
       return;
     }
