@@ -34,7 +34,7 @@ import {
   Typography,
 } from '@mui/material';
 import { useSnackbar } from 'notistack';
-import { useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 
 import { useCalendarView } from './hooks/useCalendarView.ts';
 import { useEventForm } from './hooks/useEventForm.ts';
@@ -71,14 +71,17 @@ const getBaseEventId = (eventId: string | undefined) => (eventId || '').split('@
 const REPEAT_A11Y_LABEL = '반복 일정';
 const EVENT_INLINE_STACK_PROPS = { direction: 'row' as const, spacing: 1, alignItems: 'center' as const };
 
-const RepeatIndicator = ({ repeat }: { repeat: Event['repeat'] }) => {
-  if (repeat.type === 'none') return null;
-  return (
-    <Tooltip title={REPEAT_A11Y_LABEL}>
-      <Repeat fontSize="small" data-testid="repeat-icon" aria-label={REPEAT_A11Y_LABEL} />
-    </Tooltip>
-  );
-};
+const RepeatIndicator = memo(
+  ({ repeat }: { repeat: Event['repeat'] }) => {
+    if (repeat.type === 'none') return null;
+    return (
+      <Tooltip title={REPEAT_A11Y_LABEL}>
+        <Repeat fontSize="small" data-testid="repeat-icon" aria-label={REPEAT_A11Y_LABEL} />
+      </Tooltip>
+    );
+  },
+  (prev, next) => prev.repeat.type === next.repeat.type
+);
 
 function App() {
   const {
