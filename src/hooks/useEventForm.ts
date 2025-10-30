@@ -72,20 +72,31 @@ export const useEventForm = (initialEvent?: Event) => {
     }
 
     // 유효한 날짜인지 검증
-    const date = new Date(repeatEndDate);
+    const end = new Date(repeatEndDate);
     const [year, month, day] = repeatEndDate.split('-').map(Number);
 
     if (
-      isNaN(date.getTime()) ||
-      date.getFullYear() !== year ||
-      date.getMonth() + 1 !== month ||
-      date.getDate() !== day
+      isNaN(end.getTime()) ||
+      end.getFullYear() !== year ||
+      end.getMonth() + 1 !== month ||
+      end.getDate() !== day
     ) {
       return '유효하지 않은 날짜입니다.';
     }
 
+    // 시작일과의 관계 검증 (종료일은 시작일 이상)
+    if (date) {
+      const start = new Date(date);
+      // 날짜만 비교
+      const startOnly = new Date(start.getFullYear(), start.getMonth(), start.getDate());
+      const endOnly = new Date(end.getFullYear(), end.getMonth(), end.getDate());
+      if (endOnly < startOnly) {
+        return '종료일은 시작일보다 미래여야 합니다.';
+      }
+    }
+
     return null;
-  }, [isRepeating, repeatEndDate]);
+  }, [isRepeating, repeatEndDate, date]);
 
   const setIsRepeating = (value: boolean) => {
     setIsRepeatingState(value);

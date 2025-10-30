@@ -481,7 +481,8 @@ function App() {
                   <TextField
                     id="repeat-end-date"
                     size="small"
-                    type="date"
+                    type="text"
+                    placeholder="YYYY-MM-DD"
                     value={repeatEndDate}
                     onChange={(e) => setRepeatEndDate(e.target.value)}
                     error={!!endDateError}
