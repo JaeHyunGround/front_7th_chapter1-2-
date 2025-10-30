@@ -69,7 +69,11 @@ const notificationOptions = [
 const getBaseEventId = (eventId: string | undefined) => (eventId || '').split('@')[0];
 
 const REPEAT_A11Y_LABEL = '반복 일정';
-const EVENT_INLINE_STACK_PROPS = { direction: 'row' as const, spacing: 1, alignItems: 'center' as const };
+const EVENT_INLINE_STACK_PROPS = {
+  direction: 'row' as const,
+  spacing: 1,
+  alignItems: 'center' as const,
+};
 
 const RepeatIndicator = memo(
   ({ repeat }: { repeat: Event['repeat'] }) => {
