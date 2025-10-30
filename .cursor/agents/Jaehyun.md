@@ -471,7 +471,7 @@ git commit -m "feat: {story-name} 기능 구현
 
 📢 Junhyeong 에이전트에게 작업 요청:
 
-- 작업: 코드 개선 및 리팩토링 보고서 작성
+- 작업: 작성된 기능 코드에 대한 코드 개선
 - 입력:
   - 기능 코드 (Yeongseo가 작성)
   - 테스트 코드 (Haneul이 작성)
@@ -479,7 +479,6 @@ git commit -m "feat: {story-name} 기능 구현
   - 개선된 기능 코드
   - .cursor/spec/reviews/{epic-slug}/{story-slug}.md
 - Story: {story-slug}
-- 중요: 반드시 2가지 결과물 모두 생성
 ```
 
 ### 3-3-2. 작업 결과 수신
@@ -487,7 +486,6 @@ git commit -m "feat: {story-name} 기능 구현
 ```
 Junhyeong으로부터 작업 완료 보고 수신:
   - 개선된 파일: {파일 경로들}
-  - 보고서: .cursor/spec/reviews/{epic-slug}/{story-slug}.md
   - 상태: 리팩토링 완료
   - 테스트 통과: {M}/{M}
 ```
@@ -504,7 +502,6 @@ Junhyeong으로부터 작업 완료 보고 수신:
 
 - 귀하의 체크리스트 항목을 모두 충족했습니까?
 - **특히 다음 사항을 필수로 검증**하고 결과를 보고하십시오:
-  - 리팩토링 결과 보고서(.md)가 생성되었는가?
   - **모든 테스트가 여전히 통과하는가?**
 - 검증 결과를 **반드시 응답 형식에 맞춰 명확히 보고**해 주십시오."
 ```
@@ -514,36 +511,15 @@ Junhyeong으로부터 작업 완료 보고 수신:
 ✅ **검증 통과** → 3-3-5단계(Git 커밋) 진행
 ❌ **검증 실패** → 수정 요청 → 재검증
 
-**특별 케이스: 보고서 누락**
-
-```
-❌ 검증 실패: 보고서 생성 항목 실패
-
-Junhyeong의 응답:
-❌ 체크리스트 검증 실패
-- [ ] 리팩토링 결과 보고서(.md)가 생성되었는가? ❌
-  문제: 보고서 파일이 생성되지 않음
-
-⚠️  워크플로우 중단
-
-📢 Junhyeong에게 수정 요청:
-  - 리팩토링 결과 보고서를 반드시 생성할 것
-  - 경로: .cursor/spec/reviews/{epic-slug}/{story-slug}.md
-  - 내용: 작업 요약, 주요 개선 내용, 테스트 통과 여부
-
-Junhyeong은 반드시 2가지 결과물을 생성해야 합니다:
-1. 개선된 기능 코드
-2. 리팩토링 결과 보고서
 ```
 
 ### 3-3-5. Git 커밋 (검증 통과 시에만)
 
 ```bash
-git add src/ .cursor/spec/reviews/{epic-slug}/{story-slug}.md
+git add src/
 git commit -m "refactor: {story-name} 코드 개선
 
 - 개선 내용: {summary}
-- 리팩토링 보고서 작성 완료
 - 담당: Junhyeong"
 ```
 
@@ -553,7 +529,7 @@ git commit -m "refactor: {story-name} 코드 개선
 ✅ [3-3] Story {X}/{N}: 리팩토링 완료 (REFACTOR)
   - Story: {story-slug}
   - 개선 파일: {file-paths}
-  - 보고서: .cursor/spec/reviews/{epic-slug}/{story-slug}.md
+
   - 테스트 통과: ✅ ({M}/{M})
   - 체크리스트: ✅ 통과
   - 커밋: refactor: {story-name} 코드 개선
@@ -598,12 +574,6 @@ git commit -m "refactor: {story-name} 코드 개선
 
 - `src/components/...`
 - `src/utils/...`
-- ...
-
-#### 리팩토링 보고서
-
-- `.cursor/spec/reviews/{epic-slug}/{story-1}.md`
-- `.cursor/spec/reviews/{epic-slug}/{story-2}.md`
 - ...
 
 ---
@@ -675,8 +645,6 @@ git commit -m "refactor: {story-name} 코드 개선
 ✅ **모든 테스트 통과**
 
 ✅ **린터 에러 없음**
-
-✅ **리팩토링 보고**
 
 ---
 
