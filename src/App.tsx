@@ -150,21 +150,30 @@ function App() {
 
   const isRepeatingType = (type: RepeatType) => type !== 'none';
 
+  const buildEventPayload = (overrideRepeat?: Event['repeat']): Event | EventForm => ({
+    id: editingEvent ? editingEvent.id : undefined,
+    title,
+    date,
+    startTime,
+    endTime,
+    description,
+    location,
+    category,
+    repeat: overrideRepeat ?? getRepeatInfo(),
+    notificationTime,
+  });
+
   const saveCurrentAsSingleInstance = async () => {
     setIsEditConfirmOpen(false);
     if (!editingEvent) return;
-    await saveEvent({
-      id: editingEvent.id,
-      title,
-      date,
-      startTime,
-      endTime,
-      description,
-      location,
-      category,
-      repeat: { type: 'none', interval: 1 },
-      notificationTime,
-    });
+    await saveEvent(
+      buildEventPayload({ type: 'none', interval: 1 })
+    );
+  };
+
+  const saveSeriesEdit = async () => {
+    setIsEditConfirmOpen(false);
+    await saveEvent(buildEventPayload());
   };
 
   const addOrUpdateEvent = async () => {
@@ -728,24 +737,7 @@ function App() {
           <Button onClick={saveCurrentAsSingleInstance}>
             예
           </Button>
-          <Button
-            onClick={async () => {
-              // 전체 수정: 반복 속성 유지한 채로 저장
-              setIsEditConfirmOpen(false);
-              await saveEvent({
-                id: editingEvent ? editingEvent.id : undefined,
-                title,
-                date,
-                startTime,
-                endTime,
-                description,
-                location,
-                category,
-                repeat: getRepeatInfo(),
-                notificationTime,
-              });
-            }}
-          >
+          <Button onClick={saveSeriesEdit}>
             아니오
           </Button>
           <Button onClick={() => setIsEditConfirmOpen(false)}>취소</Button>
