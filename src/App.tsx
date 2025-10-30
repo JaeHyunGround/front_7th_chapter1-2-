@@ -167,7 +167,7 @@ function App() {
     const weekDates = getWeekDates(currentDate);
     const rangeStart = new Date(weekDates[0]);
     const rangeEnd = new Date(weekDates[6]);
-    const displayedEvents = expandEventsForRange(filteredEvents, rangeStart, rangeEnd);
+    const displayedEvents = expandEventsForRange(events, rangeStart, rangeEnd);
     return (
       <Stack data-testid="week-view" spacing={4} sx={{ width: '100%' }}>
         <Typography variant="h5">{formatWeek(currentDate)}</Typography>
@@ -248,7 +248,7 @@ function App() {
     const weeks = getWeeksAtMonth(currentDate);
     const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
     const lastDay = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
-    const displayedEvents = expandEventsForRange(filteredEvents, firstDay, lastDay);
+    const displayedEvents = expandEventsForRange(events, firstDay, lastDay);
 
     return (
       <Stack data-testid="month-view" spacing={4} sx={{ width: '100%' }}>
