@@ -136,6 +136,7 @@ function App() {
   const [overlappingEvents, setOverlappingEvents] = useState<Event[]>([]);
   const [isEditConfirmOpen, setIsEditConfirmOpen] = useState(false);
   const [pendingDeleteEvent, setPendingDeleteEvent] = useState<Event | null>(null);
+  const [deletedOccurrences, setDeletedOccurrences] = useState<Set<string>>(new Set());
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -679,10 +680,30 @@ function App() {
             />
           </FormControl>
 
-          {filteredEvents.length === 0 ? (
+          {filteredEvents
+            .filter((event) => {
+              if (event.repeat?.type && event.repeat.type !== 'none') {
+                const repeatId = (event.repeat as any).id as string | undefined;
+                if (repeatId) {
+                  return !deletedOccurrences.has(`${repeatId}@${event.date}`);
+                }
+              }
+              return true;
+            })
+            .length === 0 ? (
             <Typography>검색 결과가 없습니다.</Typography>
           ) : (
-            filteredEvents.map((event) => (
+            filteredEvents
+              .filter((event) => {
+                if (event.repeat?.type && event.repeat.type !== 'none') {
+                  const repeatId = (event.repeat as any).id as string | undefined;
+                  if (repeatId) {
+                    return !deletedOccurrences.has(`${repeatId}@${event.date}`);
+                  }
+                }
+                return true;
+              })
+              .map((event) => (
               <Box key={event.id} sx={{ border: 1, borderRadius: 2, p: 3, width: '100%' }}>
                 <Stack direction="row" justifyContent="space-between">
                   <Stack>
@@ -812,7 +833,37 @@ function App() {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setPendingDeleteEvent(null)}>예</Button>
+          <Button
+            onClick={async () => {
+              const target = pendingDeleteEvent;
+              setPendingDeleteEvent(null);
+              if (!target || !target.repeat || !('id' in target.repeat) || !target.repeat.id) {
+                return;
+              }
+
+              try {
+                const repeatId = (target.repeat as any).id as string;
+                const occurrenceDate = target.date;
+                await fetch(`/api/recurring-events/${repeatId}`, {
+                  method: 'PUT',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ repeat: { exceptions: [occurrenceDate] } }),
+                });
+
+                setDeletedOccurrences((prev) => {
+                  const next = new Set(prev);
+                  next.add(`${repeatId}@${occurrenceDate}`);
+                  return next;
+                });
+
+                enqueueSnackbar('일정이 삭제되었습니다.', { variant: 'info' });
+              } catch (e) {
+                enqueueSnackbar('일정 삭제 실패', { variant: 'error' });
+              }
+            }}
+          >
+            예
+          </Button>
           <Button onClick={() => setPendingDeleteEvent(null)}>아니오</Button>
         </DialogActions>
       </Dialog>
