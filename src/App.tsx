@@ -68,11 +68,13 @@ const notificationOptions = [
 
 const getBaseEventId = (eventId: string | undefined) => (eventId || '').split('@')[0];
 
+const REPEAT_A11Y_LABEL = '반복 일정';
+
 const RepeatIndicator = ({ repeat }: { repeat: Event['repeat'] }) => {
   if (repeat.type === 'none') return null;
   return (
-    <Tooltip title="반복 일정">
-      <Repeat fontSize="small" data-testid="repeat-icon" aria-label="반복 일정" />
+    <Tooltip title={REPEAT_A11Y_LABEL}>
+      <Repeat fontSize="small" data-testid="repeat-icon" aria-label={REPEAT_A11Y_LABEL} />
     </Tooltip>
   );
 };
