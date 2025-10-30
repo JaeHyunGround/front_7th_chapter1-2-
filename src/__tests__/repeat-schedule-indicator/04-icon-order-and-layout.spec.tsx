@@ -194,5 +194,3 @@ describe('[Story] 아이콘 순서 및 레이아웃', () => {
     ).toBeTruthy();
   });
 });
-
-

@@ -131,5 +131,3 @@ describe('[Story] 성능 및 전개 범위', () => {
     expect(total).toBeGreaterThanOrEqual(100);
   });
 });
-
-
