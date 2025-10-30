@@ -83,5 +83,3 @@ describe('[Story] 확인 모달 노출', () => {
     expect(screen.queryByText('해당 일정만 수정하시겠어요?')).toBeNull();
   });
 });
-
-
