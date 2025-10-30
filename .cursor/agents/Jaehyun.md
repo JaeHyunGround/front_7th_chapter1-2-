@@ -71,7 +71,9 @@ description: TDD 워크플로우 전체를 조율하는 오케스트레이션 �
 
 ## 1단계: Epic 작성 (Doeun)
 
-### 1-1. 작업 요청
+### 1-1. Doeun 에이전트에게 작업 요청
+
+> Doeun 에이전트를 사용하기 위해선 `.cursor/agents/Doeun.md`를 호출해서 사용하세요.
 
 ```markdown
 🔄 [1/5] Epic 작성 중...
@@ -216,6 +218,8 @@ git commit -m "docs: {epic-name} Epic 스펙 작성
 
 ## 2단계: Story 분리 (Taeyoung)
 
+> Taeyoung 에이전트를 사용하기 위해선 `.cursor/agents/Taeyoung.md`를 호출해서 사용하세요.
+
 ### 2-1. 작업 요청
 
 ```markdown
@@ -294,6 +298,8 @@ Story N → [Haneul → Yeongseo → Junhyeong] → 각 검증 + 커밋
 
 ## 3-1. 테스트 작성 (Haneul) - RED
 
+> Haneul 에이전트를 사용하기 위해선 `.cursor/agents/Haneul.md`를 호출해서 사용하세요.
+
 ### 3-1-1. 작업 요청
 
 ```markdown
@@ -362,6 +368,8 @@ git commit -m "test: {story-name} 테스트 케이스 작성
 ---
 
 ## 3-2. 기능 구현 (Yeongseo) - GREEN
+
+> Yeongseo 에이전트를 사용하기 위해선 `.cursor/agents/Yeongseo.md`를 호출해서 사용하세요.
 
 ### 3-2-1. 작업 요청
 
@@ -453,6 +461,8 @@ git commit -m "feat: {story-name} 기능 구현
 ---
 
 ## 3-3. 리팩토링 (Junhyeong) - REFACTOR
+
+> Junhyeong 에이전트를 사용하기 위해선 `.cursor/agents/Junhyeong.md`를 호출해서 사용하세요.
 
 ### 3-3-1. 작업 요청
 
@@ -671,6 +681,8 @@ git commit -m "refactor: {story-name} 코드 개선
 ---
 
 ## 커밋 컨벤션
+
+> 각 에이전트의 업무 단계가 끝나면 무조건 커밋을 작성해야 합니다.
 
 모든 커밋은 다음 형식을 따릅니다:
 
