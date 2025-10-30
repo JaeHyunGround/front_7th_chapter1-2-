@@ -34,7 +34,7 @@ import {
   Typography,
 } from '@mui/material';
 import { useSnackbar } from 'notistack';
-import { memo, useEffect, useState } from 'react';
+import { memo, useEffect, useMemo, useState } from 'react';
 
 import { useCalendarView } from './hooks/useCalendarView.ts';
 import { useEventForm } from './hooks/useEventForm.ts';
@@ -137,6 +137,55 @@ function App() {
   const [isEditConfirmOpen, setIsEditConfirmOpen] = useState(false);
   const [pendingDeleteEvent, setPendingDeleteEvent] = useState<Event | null>(null);
   const [deletedOccurrences, setDeletedOccurrences] = useState<Set<string>>(new Set());
+  const getRepeatSeriesId = (repeat: Event['repeat']): string | undefined => {
+    const anyRepeat = repeat as unknown as { id?: string };
+    return typeof anyRepeat?.id === 'string' && anyRepeat.id.length > 0
+      ? anyRepeat.id
+      : undefined;
+  };
+
+  const isDeletedOccurrence = (event: Event): boolean => {
+    if (event.repeat?.type && event.repeat.type !== 'none') {
+      const seriesId = getRepeatSeriesId(event.repeat);
+      if (seriesId) {
+        return deletedOccurrences.has(`${seriesId}@${event.date}`);
+      }
+    }
+    return false;
+  };
+
+  const visibleEvents = useMemo(
+    () => filteredEvents.filter((event) => !isDeletedOccurrence(event)),
+    [filteredEvents, deletedOccurrences]
+  );
+
+  const handleConfirmDeleteSingle = async () => {
+    const target = pendingDeleteEvent;
+    setPendingDeleteEvent(null);
+    if (!target || !target.repeat) return;
+    const repeatId = getRepeatSeriesId(target.repeat);
+    if (!repeatId) return;
+
+    try {
+      const occurrenceDate = target.date;
+      await fetch(`/api/recurring-events/${repeatId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ repeat: { exceptions: [occurrenceDate] } }),
+      });
+
+      setDeletedOccurrences((prev) => {
+        const next = new Set(prev);
+        next.add(`${repeatId}@${occurrenceDate}`);
+        return next;
+      });
+
+      enqueueSnackbar('일정이 삭제되었습니다.', { variant: 'info' });
+    } catch (e) {
+      enqueueSnackbar('일정 삭제 실패', { variant: 'error' });
+    }
+  };
+
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -680,30 +729,10 @@ function App() {
             />
           </FormControl>
 
-          {filteredEvents
-            .filter((event) => {
-              if (event.repeat?.type && event.repeat.type !== 'none') {
-                const repeatId = (event.repeat as any).id as string | undefined;
-                if (repeatId) {
-                  return !deletedOccurrences.has(`${repeatId}@${event.date}`);
-                }
-              }
-              return true;
-            })
-            .length === 0 ? (
+          {visibleEvents.length === 0 ? (
             <Typography>검색 결과가 없습니다.</Typography>
           ) : (
-            filteredEvents
-              .filter((event) => {
-                if (event.repeat?.type && event.repeat.type !== 'none') {
-                  const repeatId = (event.repeat as any).id as string | undefined;
-                  if (repeatId) {
-                    return !deletedOccurrences.has(`${repeatId}@${event.date}`);
-                  }
-                }
-                return true;
-              })
-              .map((event) => (
+            visibleEvents.map((event) => (
               <Box key={event.id} sx={{ border: 1, borderRadius: 2, p: 3, width: '100%' }}>
                 <Stack direction="row" justifyContent="space-between">
                   <Stack>
@@ -833,35 +862,7 @@ function App() {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button
-            onClick={async () => {
-              const target = pendingDeleteEvent;
-              setPendingDeleteEvent(null);
-              if (!target || !target.repeat || !('id' in target.repeat) || !target.repeat.id) {
-                return;
-              }
-
-              try {
-                const repeatId = (target.repeat as any).id as string;
-                const occurrenceDate = target.date;
-                await fetch(`/api/recurring-events/${repeatId}`, {
-                  method: 'PUT',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ repeat: { exceptions: [occurrenceDate] } }),
-                });
-
-                setDeletedOccurrences((prev) => {
-                  const next = new Set(prev);
-                  next.add(`${repeatId}@${occurrenceDate}`);
-                  return next;
-                });
-
-                enqueueSnackbar('일정이 삭제되었습니다.', { variant: 'info' });
-              } catch (e) {
-                enqueueSnackbar('일정 삭제 실패', { variant: 'error' });
-              }
-            }}
-          >
+          <Button onClick={handleConfirmDeleteSingle}>
             예
           </Button>
           <Button onClick={() => setPendingDeleteEvent(null)}>아니오</Button>
