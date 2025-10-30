@@ -127,11 +127,23 @@ describe('[Story] 주간 뷰 반복 아이콘 표시', () => {
     const stackEl = titleEl.closest('[class]')!.parentElement as HTMLElement;
 
     const inline = within(stackEl);
-    const iconsAndText = stackEl.querySelectorAll('svg, span, p, div');
-    // 첫 아이콘: Notifications, 두번째: repeat-icon, 그 다음 텍스트(타이틀)
-    expect(inline.getAllByRole('img', { hidden: true }).length).toBeGreaterThanOrEqual(1);
-    expect(inline.getByTestId('repeat-icon')).toBeInTheDocument();
+    const repeatIcon = inline.getByTestId('repeat-icon');
+    const notificationIcon = stackEl.querySelector(
+      'svg:not([data-testid="repeat-icon"])'
+    ) as SVGElement | null;
+    const titleNode = inline.getByText('알림 회의');
+
+    expect(notificationIcon).not.toBeNull();
+    expect(repeatIcon).toBeInTheDocument();
+
+    // 알림 아이콘이 반복 아이콘보다 먼저
+    expect(
+      (notificationIcon as Element).compareDocumentPosition(repeatIcon) &
+        Node.DOCUMENT_POSITION_FOLLOWING
+    ).toBeTruthy();
+    // 반복 아이콘이 타이틀보다 먼저
+    expect(
+      repeatIcon.compareDocumentPosition(titleNode) & Node.DOCUMENT_POSITION_FOLLOWING
+    ).toBeTruthy();
   });
 });
-
-
