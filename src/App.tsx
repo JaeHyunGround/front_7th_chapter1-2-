@@ -191,7 +191,6 @@ function App() {
     }
   };
 
-
   const { enqueueSnackbar } = useSnackbar();
 
   // 이벤트 로딩 시 최초 이벤트 날짜로 캘린더 기준을 이동시켜 테스트/사용성 정합성 확보
@@ -222,9 +221,7 @@ function App() {
   const saveCurrentAsSingleInstance = async () => {
     closeEditConfirm();
     if (!editingEvent) return;
-    await saveEvent(
-      buildEventPayload({ type: 'none', interval: 1 })
-    );
+    await saveEvent(buildEventPayload({ type: 'none', interval: 1 }));
     await recreateSeriesStartingPreviousWeekIfRepeating();
   };
 
@@ -850,16 +847,13 @@ function App() {
         <DialogTitle>해당 일정만 수정하시겠어요?</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            단일 수정 시 해당 일정만 변경되고 반복에서 분리됩니다. 전체 수정을 선택하면 반복 일정 전체가 변경됩니다.
+            단일 수정 시 해당 일정만 변경되고 반복에서 분리됩니다. 전체 수정을 선택하면 반복 일정
+            전체가 변경됩니다.
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={saveCurrentAsSingleInstance}>
-            예
-          </Button>
-          <Button onClick={saveSeriesEdit}>
-            아니오
-          </Button>
+          <Button onClick={saveCurrentAsSingleInstance}>예</Button>
+          <Button onClick={saveSeriesEdit}>아니오</Button>
           <Button onClick={cancelEditAndRestoreForm}>취소</Button>
         </DialogActions>
       </Dialog>
@@ -869,13 +863,12 @@ function App() {
         <DialogTitle>해당 일정만 삭제하시겠어요?</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            단일 삭제 시 해당 일정만 제거되고 반복 시리즈는 유지됩니다. 전체 삭제를 선택하면 반복 일정 전체가 제거됩니다.
+            단일 삭제 시 해당 일정만 제거되고 반복 시리즈는 유지됩니다. 전체 삭제를 선택하면 반복
+            일정 전체가 제거됩니다.
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleConfirmDeleteSingle}>
-            예
-          </Button>
+          <Button onClick={handleConfirmDeleteSingle}>예</Button>
           <Button
             onClick={async () => {
               const target = pendingDeleteEvent;
