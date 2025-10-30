@@ -140,10 +140,7 @@ function App() {
   const [deletedSeriesIds, setDeletedSeriesIds] = useState<Set<string>>(new Set());
   const [deletedEventIds, setDeletedEventIds] = useState<Set<string>>(new Set());
   const getRepeatSeriesId = (repeat: Event['repeat']): string | undefined => {
-    const anyRepeat = repeat as unknown as { id?: string };
-    return typeof anyRepeat?.id === 'string' && anyRepeat.id.length > 0
-      ? anyRepeat.id
-      : undefined;
+    return repeat.id && repeat.id.length > 0 ? repeat.id : undefined;
   };
 
   const isDeletedOccurrence = (event: Event): boolean => {
@@ -336,7 +333,9 @@ function App() {
     const weekDates = getWeekDates(currentDate);
     const rangeStart = new Date(weekDates[0]);
     const rangeEnd = new Date(weekDates[6]);
-    const displayedEvents = expandEventsForRange(events, rangeStart, rangeEnd);
+    const displayedEvents = expandEventsForRange(events, rangeStart, rangeEnd).filter(
+      (event) => !isDeletedOccurrence(event)
+    );
     return (
       <Stack data-testid="week-view" spacing={4} sx={{ width: '100%' }}>
         <Typography variant="h5">{formatWeek(currentDate)}</Typography>
@@ -418,7 +417,9 @@ function App() {
     const weeks = getWeeksAtMonth(currentDate);
     const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
     const lastDay = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
-    const displayedEvents = expandEventsForRange(events, firstDay, lastDay);
+    const displayedEvents = expandEventsForRange(events, firstDay, lastDay).filter(
+      (event) => !isDeletedOccurrence(event)
+    );
 
     return (
       <Stack data-testid="month-view" spacing={4} sx={{ width: '100%' }}>
