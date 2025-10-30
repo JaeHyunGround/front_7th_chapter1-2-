@@ -90,5 +90,3 @@ describe('[Story] 월간 뷰 반복 아이콘 표시', () => {
     expect(within(monthViewNov).queryByText('월말 정기 점검')).not.toBeInTheDocument();
   });
 });
-
-
