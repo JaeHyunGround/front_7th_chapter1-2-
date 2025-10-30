@@ -53,7 +53,7 @@ function generateDaily(event: Event, rangeStart: Date, rangeEnd: Date): Event[] 
   for (let d = start; d <= until && d <= rangeEnd; d = addDays(d, interval)) {
     if (d < rangeStart) continue;
     const dateStr = formatISODate(d);
-    const exceptions = (event.repeat as any).exceptions as string[] | undefined;
+    const exceptions = event.repeat.exceptions;
     if (exceptions && exceptions.includes(dateStr)) continue;
     occurrences.push({ ...event, id: `${event.id || 'new'}@${dateStr}`, date: dateStr });
   }
@@ -74,7 +74,7 @@ function generateWeekly(event: Event, rangeStart: Date, rangeEnd: Date): Event[]
     if (d < rangeStart) continue;
     if (d.getDay() === startDow) {
       const dateStr = formatISODate(d);
-      const exceptions = (event.repeat as any).exceptions as string[] | undefined;
+      const exceptions = event.repeat.exceptions;
       if (exceptions && exceptions.includes(dateStr)) continue;
       occurrences.push({ ...event, id: `${event.id || 'new'}@${dateStr}`, date: dateStr });
     }
@@ -96,7 +96,7 @@ function generateMonthly(event: Event, rangeStart: Date, rangeEnd: Date): Event[
     const occurrenceDate = new Date(d.getFullYear(), d.getMonth(), day);
     if (occurrenceDate < rangeStart) continue;
     const dateStr = formatISODate(occurrenceDate);
-    const exceptions = (event.repeat as any).exceptions as string[] | undefined;
+    const exceptions = event.repeat.exceptions;
     if (exceptions && exceptions.includes(dateStr)) continue;
     occurrences.push({
       ...event,
@@ -126,7 +126,7 @@ function generateYearly(event: Event, rangeStart: Date, rangeEnd: Date): Event[]
     const occurrenceDate = new Date(y, month, day);
     if (occurrenceDate < rangeStart) continue;
     const dateStr = formatISODate(occurrenceDate);
-    const exceptions = (event.repeat as any).exceptions as string[] | undefined;
+    const exceptions = event.repeat.exceptions;
     if (exceptions && exceptions.includes(dateStr)) continue;
     occurrences.push({
       ...event,
