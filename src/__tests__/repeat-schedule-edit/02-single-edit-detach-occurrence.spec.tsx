@@ -62,5 +62,3 @@ describe('[Story] 단일 수정(예) - 인스턴스 분리 저장', () => {
     expect(within(list).queryByText('주간 회의')).toBeNull();
   });
 });
-
-

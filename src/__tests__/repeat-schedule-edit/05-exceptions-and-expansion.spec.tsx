@@ -64,5 +64,3 @@ describe('[Story] 예외 처리 저장 규칙 및 확장 반영', () => {
     expect(within(monthView).getByText('주간 회의')).toBeInTheDocument();
   });
 });
-
-

@@ -65,5 +65,3 @@ describe('[Story] 취소 - 저장 중단 및 상태 유지', () => {
     expect(screen.getByLabelText('제목')).toHaveValue('주간 회의');
   });
 });
-
-

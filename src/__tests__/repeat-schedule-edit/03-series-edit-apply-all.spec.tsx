@@ -61,5 +61,3 @@ describe('[Story] 전체 수정(아니오) - 시리즈 전체 반영', () => {
     expect(within(list).getByText(/반복:\s*/)).toBeInTheDocument();
   });
 });
-
-
