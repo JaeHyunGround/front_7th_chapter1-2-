@@ -172,10 +172,14 @@ function App() {
 
     try {
       const occurrenceDate = target.date;
+      const existingExceptions: string[] = Array.isArray(target.repeat.exceptions)
+        ? target.repeat.exceptions
+        : [];
+      const mergedExceptions = Array.from(new Set<string>([...existingExceptions, occurrenceDate]));
       await fetch(`/api/recurring-events/${repeatId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ repeat: { exceptions: [occurrenceDate] } }),
+        body: JSON.stringify({ repeat: { exceptions: mergedExceptions } }),
       });
 
       setDeletedOccurrences((prev) => {
