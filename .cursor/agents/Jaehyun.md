@@ -511,17 +511,11 @@ Junhyeong으로부터 작업 완료 보고 수신:
 ✅ **검증 통과** → 3-3-5단계(Git 커밋) 진행
 ❌ **검증 실패** → 수정 요청 → 재검증
 
-```
-
 ### 3-3-5. Git 커밋 (검증 통과 시에만)
 
-```bash
-git add src/
-git commit -m "refactor: {story-name} 코드 개선
+**작업을 마무리 한 후, 체크리스트를 다 통과하는 것을 확인 한 후 커밋을 작성**하세요.
 
-- 개선 내용: {summary}
-- 담당: Junhyeong"
-```
+- 커밋 컨벤션은 `.cursor/docs/commit-convention.md` 문서를 참고해서 작성하세요.
 
 ### 3-3-6. 진행 상황 출력
 
