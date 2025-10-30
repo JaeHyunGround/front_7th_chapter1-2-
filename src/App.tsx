@@ -34,7 +34,7 @@ import {
   Typography,
 } from '@mui/material';
 import { useSnackbar } from 'notistack';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useCalendarView } from './hooks/useCalendarView.ts';
 import { useEventForm } from './hooks/useEventForm.ts';
@@ -113,13 +113,23 @@ function App() {
   );
 
   const { notifications, notifiedEvents, setNotifications } = useNotifications(events);
-  const { view, setView, currentDate, holidays, navigate } = useCalendarView();
+  const { view, setView, currentDate, setCurrentDate, holidays, navigate } = useCalendarView();
   const { searchTerm, filteredEvents, setSearchTerm } = useSearch(events, currentDate, view);
 
   const [isOverlapDialogOpen, setIsOverlapDialogOpen] = useState(false);
   const [overlappingEvents, setOverlappingEvents] = useState<Event[]>([]);
 
   const { enqueueSnackbar } = useSnackbar();
+
+  // 이벤트 로딩 시 최초 이벤트 날짜로 캘린더 기준을 이동시켜 테스트/사용성 정합성 확보
+  useEffect(() => {
+    if (events.length > 0) {
+      const firstDate = new Date(events[0].date);
+      if (!Number.isNaN(firstDate.getTime())) {
+        setCurrentDate(firstDate);
+      }
+    }
+  }, [events, setCurrentDate]);
 
   const addOrUpdateEvent = async () => {
     if (!title || !date || !startTime || !endTime) {
@@ -204,7 +214,8 @@ function App() {
                         (event) => new Date(event.date).toDateString() === date.toDateString()
                       )
                       .map((event) => {
-                        const isNotified = notifiedEvents.includes(event.id);
+                        const baseId = (event.id || '').split('@')[0];
+                        const isNotified = notifiedEvents.includes(baseId);
                         return (
                           <Box
                             key={event.id}
@@ -295,7 +306,8 @@ function App() {
                               </Typography>
                             )}
                             {getEventsForDay(displayedEvents, day).map((event) => {
-                              const isNotified = notifiedEvents.includes(event.id);
+                              const baseId = (event.id || '').split('@')[0];
+                              const isNotified = notifiedEvents.includes(baseId);
                               return (
                                 <Box
                                   key={event.id}
