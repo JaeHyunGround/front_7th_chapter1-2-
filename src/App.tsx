@@ -135,6 +135,7 @@ function App() {
   const [isOverlapDialogOpen, setIsOverlapDialogOpen] = useState(false);
   const [overlappingEvents, setOverlappingEvents] = useState<Event[]>([]);
   const [isEditConfirmOpen, setIsEditConfirmOpen] = useState(false);
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -725,7 +726,16 @@ function App() {
                     <IconButton aria-label="Edit event" onClick={() => editEvent(event)}>
                       <Edit />
                     </IconButton>
-                    <IconButton aria-label="Delete event" onClick={() => deleteEvent(event.id)}>
+                    <IconButton
+                      aria-label="Delete event"
+                      onClick={() => {
+                        if (event.repeat.type !== 'none') {
+                          setIsDeleteConfirmOpen(true);
+                          return;
+                        }
+                        deleteEvent(event.id);
+                      }}
+                    >
                       <Delete />
                     </IconButton>
                   </Stack>
@@ -790,6 +800,20 @@ function App() {
             아니오
           </Button>
           <Button onClick={cancelEditAndRestoreForm}>취소</Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* 반복 일정 삭제 확인 모달 */}
+      <Dialog open={isDeleteConfirmOpen} onClose={() => setIsDeleteConfirmOpen(false)}>
+        <DialogTitle>해당 일정만 삭제하시겠어요?</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            단일 삭제 시 해당 일정만 제거되고 반복 시리즈는 유지됩니다. 전체 삭제를 선택하면 반복 일정 전체가 제거됩니다.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setIsDeleteConfirmOpen(false)}>예</Button>
+          <Button onClick={() => setIsDeleteConfirmOpen(false)}>아니오</Button>
         </DialogActions>
       </Dialog>
 
