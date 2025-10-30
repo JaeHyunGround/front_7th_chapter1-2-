@@ -4,8 +4,8 @@ import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { SnackbarProvider } from 'notistack';
 
-import App from '../../App';
 import { setupMockHandlerCreation } from '../../__mocks__/handlersUtils';
+import App from '../../App';
 
 const theme = createTheme();
 
@@ -102,5 +102,3 @@ describe('반복 간격 입력 검증', () => {
     expect(screen.getByText('검색 결과가 없습니다.')).toBeInTheDocument();
   });
 });
-
-
