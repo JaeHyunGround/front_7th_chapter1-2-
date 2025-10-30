@@ -194,7 +194,9 @@ function App() {
                       {date.getDate()}
                     </Typography>
                     {displayedEvents
-                      .filter((event) => new Date(event.date).toDateString() === date.toDateString())
+                      .filter(
+                        (event) => new Date(event.date).toDateString() === date.toDateString()
+                      )
                       .map((event) => {
                         const isNotified = notifiedEvents.includes(event.id);
                         return (
