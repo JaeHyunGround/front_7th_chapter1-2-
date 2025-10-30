@@ -66,6 +66,11 @@ const notificationOptions = [
   { value: 1440, label: '1일 전' },
 ];
 
+const RepeatIndicator = ({ repeat }: { repeat: Event['repeat'] }) => {
+  if (repeat.type === 'none') return null;
+  return <Repeat fontSize="small" data-testid="repeat-icon" aria-label="반복 일정" />;
+};
+
 function App() {
   const {
     title,
@@ -217,13 +222,7 @@ function App() {
                           >
                             <Stack direction="row" spacing={1} alignItems="center">
                               {isNotified && <Notifications fontSize="small" />}
-                              {event.repeat?.type && event.repeat.type !== 'none' && (
-                                <Repeat
-                                  fontSize="small"
-                                  data-testid="repeat-icon"
-                                  aria-label="반복 일정"
-                                />
-                              )}
+                              <RepeatIndicator repeat={event.repeat} />
                               <Typography
                                 variant="caption"
                                 noWrap
@@ -314,13 +313,7 @@ function App() {
                                 >
                                   <Stack direction="row" spacing={1} alignItems="center">
                                     {isNotified && <Notifications fontSize="small" />}
-                                    {event.repeat?.type && event.repeat.type !== 'none' && (
-                                      <Repeat
-                                        fontSize="small"
-                                        data-testid="repeat-icon"
-                                        aria-label="반복 일정"
-                                      />
-                                    )}
+                                    <RepeatIndicator repeat={event.repeat} />
                                     <Typography
                                       variant="caption"
                                       noWrap
