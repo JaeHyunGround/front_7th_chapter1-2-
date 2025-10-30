@@ -34,7 +34,7 @@ import {
   Typography,
 } from '@mui/material';
 import { useSnackbar } from 'notistack';
-import { memo, useEffect, useMemo, useState } from 'react';
+import { memo, useEffect, useMemo, useRef, useState } from 'react';
 
 import { useCalendarView } from './hooks/useCalendarView.ts';
 import { useEventForm } from './hooks/useEventForm.ts';
@@ -131,6 +131,7 @@ function App() {
   const { notifications, notifiedEvents, setNotifications } = useNotifications(events);
   const { view, setView, currentDate, setCurrentDate, holidays, navigate } = useCalendarView();
   const { searchTerm, filteredEvents, setSearchTerm } = useSearch(events, currentDate, view);
+  const searchInputRef = useRef<HTMLInputElement | null>(null);
 
   const [isOverlapDialogOpen, setIsOverlapDialogOpen] = useState(false);
   const [overlappingEvents, setOverlappingEvents] = useState<Event[]>([]);
@@ -734,6 +735,7 @@ function App() {
               placeholder="검색어를 입력하세요"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
+              inputRef={searchInputRef}
             />
           </FormControl>
 
@@ -794,6 +796,8 @@ function App() {
                         // 비반복: 즉시 삭제 + 로컬 리스트 반영
                         setDeletedEventIds((prev) => new Set(prev).add(event.id));
                         deleteEvent(event.id);
+                        // 삭제 후 검색 입력으로 포커스 이동
+                        searchInputRef.current?.focus();
                       }}
                     >
                       <Delete />
