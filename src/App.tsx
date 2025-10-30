@@ -137,6 +137,7 @@ function App() {
   const [isEditConfirmOpen, setIsEditConfirmOpen] = useState(false);
   const [pendingDeleteEvent, setPendingDeleteEvent] = useState<Event | null>(null);
   const [deletedOccurrences, setDeletedOccurrences] = useState<Set<string>>(new Set());
+  const [deletedSeriesIds, setDeletedSeriesIds] = useState<Set<string>>(new Set());
   const getRepeatSeriesId = (repeat: Event['repeat']): string | undefined => {
     const anyRepeat = repeat as unknown as { id?: string };
     return typeof anyRepeat?.id === 'string' && anyRepeat.id.length > 0
@@ -148,6 +149,7 @@ function App() {
     if (event.repeat?.type && event.repeat.type !== 'none') {
       const seriesId = getRepeatSeriesId(event.repeat);
       if (seriesId) {
+        if (deletedSeriesIds.has(seriesId)) return true;
         return deletedOccurrences.has(`${seriesId}@${event.date}`);
       }
     }
@@ -865,7 +867,29 @@ function App() {
           <Button onClick={handleConfirmDeleteSingle}>
             예
           </Button>
-          <Button onClick={() => setPendingDeleteEvent(null)}>아니오</Button>
+          <Button
+            onClick={async () => {
+              const target = pendingDeleteEvent;
+              setPendingDeleteEvent(null);
+              if (!target || !target.repeat) return;
+              const repeatId = getRepeatSeriesId(target.repeat);
+              if (!repeatId) return;
+
+              try {
+                await fetch(`/api/recurring-events/${repeatId}`, { method: 'DELETE' });
+                setDeletedSeriesIds((prev) => {
+                  const next = new Set(prev);
+                  next.add(repeatId);
+                  return next;
+                });
+                enqueueSnackbar('일정이 삭제되었습니다.', { variant: 'info' });
+              } catch (e) {
+                enqueueSnackbar('일정 삭제 실패', { variant: 'error' });
+              }
+            }}
+          >
+            아니오
+          </Button>
         </DialogActions>
       </Dialog>
 
