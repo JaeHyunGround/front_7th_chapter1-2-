@@ -138,6 +138,7 @@ function App() {
   const [pendingDeleteEvent, setPendingDeleteEvent] = useState<Event | null>(null);
   const [deletedOccurrences, setDeletedOccurrences] = useState<Set<string>>(new Set());
   const [deletedSeriesIds, setDeletedSeriesIds] = useState<Set<string>>(new Set());
+  const [deletedEventIds, setDeletedEventIds] = useState<Set<string>>(new Set());
   const getRepeatSeriesId = (repeat: Event['repeat']): string | undefined => {
     const anyRepeat = repeat as unknown as { id?: string };
     return typeof anyRepeat?.id === 'string' && anyRepeat.id.length > 0
@@ -146,6 +147,7 @@ function App() {
   };
 
   const isDeletedOccurrence = (event: Event): boolean => {
+    if (deletedEventIds.has(event.id)) return true;
     if (event.repeat?.type && event.repeat.type !== 'none') {
       const seriesId = getRepeatSeriesId(event.repeat);
       if (seriesId) {
@@ -785,6 +787,8 @@ function App() {
                           setPendingDeleteEvent(event);
                           return;
                         }
+                        // 비반복: 즉시 삭제 + 로컬 리스트 반영
+                        setDeletedEventIds((prev) => new Set(prev).add(event.id));
                         deleteEvent(event.id);
                       }}
                     >
