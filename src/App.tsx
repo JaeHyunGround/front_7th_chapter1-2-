@@ -164,7 +164,7 @@ function App() {
   });
 
   const saveCurrentAsSingleInstance = async () => {
-    setIsEditConfirmOpen(false);
+    closeEditConfirm();
     if (!editingEvent) return;
     await saveEvent(
       buildEventPayload({ type: 'none', interval: 1 })
@@ -172,17 +172,19 @@ function App() {
   };
 
   const saveSeriesEdit = async () => {
-    setIsEditConfirmOpen(false);
+    closeEditConfirm();
     await saveEvent(buildEventPayload());
   };
 
   const cancelEditAndRestoreForm = () => {
-    setIsEditConfirmOpen(false);
+    closeEditConfirm();
     if (editingEvent) {
       setTitle(editingEvent.title);
       // 필요 시 다른 필드 복원 확장 가능
     }
   };
+
+  const closeEditConfirm = () => setIsEditConfirmOpen(false);
 
   const addOrUpdateEvent = async () => {
     if (!title || !date || !startTime || !endTime) {
