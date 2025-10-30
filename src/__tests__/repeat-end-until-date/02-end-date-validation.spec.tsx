@@ -33,9 +33,7 @@ describe('[Story] 종료일 형식 및 유효성 검증', () => {
     const endDateInput = screen.getByLabelText(/반복 종료일/i);
     fireEvent.change(endDateInput, { target: { value: '2025-1-5' } });
 
-    expect(
-      screen.getByText('날짜 형식이 올바르지 않습니다. (YYYY-MM-DD)')
-    ).toBeInTheDocument();
+    expect(screen.getByText('날짜 형식이 올바르지 않습니다. (YYYY-MM-DD)')).toBeInTheDocument();
   });
 
   it("존재하지 않는 날짜('2025-02-30') 입력 시 '유효하지 않은 날짜입니다.' 오류 표시", async () => {

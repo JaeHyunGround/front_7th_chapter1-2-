@@ -50,17 +50,21 @@ describe('[Story] 종료일 적용 - 매년 반복(윤년 2/29 특수 케이스)
 
     // 2024-02: 1회 표시
     const monthView2024Feb = await screen.findByTestId('month-view');
-    expect(await within(monthView2024Feb).findAllByText('이어리 종료일 포함(윤년)')).toHaveLength(1);
+    expect(await within(monthView2024Feb).findAllByText('이어리 종료일 포함(윤년)')).toHaveLength(
+      1
+    );
 
     // 2025-02로 이동 (12개월 앞으로)
     for (let i = 0; i < 12; i++) {
       // Next 버튼은 월 단위 이동
-      // eslint-disable-next-line no-await-in-loop
+
       await user.click(screen.getByLabelText('Next'));
     }
 
     // 2025-02: 평년 → 표시되지 않음
     const monthView2025Feb = await screen.findByTestId('month-view');
-    expect(within(monthView2025Feb).queryByText('이어리 종료일 포함(윤년)')).not.toBeInTheDocument();
+    expect(
+      within(monthView2025Feb).queryByText('이어리 종료일 포함(윤년)')
+    ).not.toBeInTheDocument();
   });
 });
