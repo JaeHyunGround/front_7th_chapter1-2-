@@ -97,6 +97,8 @@ function App() {
     resetForm,
     editEvent,
     getRepeatInfo,
+    intervalError,
+    endDateError,
   } = useEventForm();
 
   const { events, saveEvent, deleteEvent } = useEventOperations(Boolean(editingEvent), () =>
@@ -120,6 +122,11 @@ function App() {
 
     if (startTimeError || endTimeError) {
       enqueueSnackbar('시간 설정을 확인해주세요.', { variant: 'error' });
+      return;
+    }
+
+    if (isRepeating && (intervalError || endDateError)) {
+      enqueueSnackbar('반복 설정을 확인해주세요.', { variant: 'error' });
       return;
     }
 
@@ -463,8 +470,10 @@ function App() {
                     size="small"
                     type="number"
                     value={repeatInterval}
-                    onChange={(e) => setRepeatInterval(Number(e.target.value))}
+                    onChange={(e) => setRepeatInterval(e.target.value)}
                     slotProps={{ htmlInput: { min: 1 } }}
+                    error={!!intervalError}
+                    helperText={intervalError || ''}
                   />
                 </FormControl>
                 <FormControl fullWidth>
@@ -475,6 +484,8 @@ function App() {
                     type="date"
                     value={repeatEndDate}
                     onChange={(e) => setRepeatEndDate(e.target.value)}
+                    error={!!endDateError}
+                    helperText={endDateError || ''}
                   />
                 </FormControl>
               </Stack>

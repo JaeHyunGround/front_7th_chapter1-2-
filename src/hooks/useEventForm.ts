@@ -17,7 +17,9 @@ export const useEventForm = (initialEvent?: Event) => {
     initialEvent ? initialEvent.repeat.type !== 'none' : false
   );
   const [repeatType, setRepeatType] = useState<RepeatType>(initialEvent?.repeat.type || 'none');
-  const [repeatInterval, setRepeatInterval] = useState(initialEvent?.repeat.interval || 1);
+  const [repeatInterval, setRepeatInterval] = useState<string>(
+    initialEvent ? String(initialEvent.repeat.interval) : '1'
+  );
   const [repeatEndDate, setRepeatEndDate] = useState(initialEvent?.repeat.endDate || '');
   const [notificationTime, setNotificationTime] = useState(initialEvent?.notificationTime || 10);
 
@@ -32,11 +34,26 @@ export const useEventForm = (initialEvent?: Event) => {
   const intervalError = useMemo(() => {
     if (!isRepeating) return null;
 
-    if (repeatInterval < 1) {
+    const value = repeatInterval;
+    if (value.trim() === '') {
       return '반복 간격은 1 이상이어야 합니다.';
     }
 
-    if (!Number.isInteger(repeatInterval)) {
+    if (value.includes('.')) {
+      return '반복 간격은 정수여야 합니다.';
+    }
+
+    const num = Number(value);
+
+    if (Number.isNaN(num)) {
+      return '반복 간격은 정수여야 합니다.';
+    }
+
+    if (num < 1) {
+      return '반복 간격은 1 이상이어야 합니다.';
+    }
+
+    if (!Number.isInteger(num)) {
       return '반복 간격은 정수여야 합니다.';
     }
 
@@ -105,7 +122,7 @@ export const useEventForm = (initialEvent?: Event) => {
     setCategory('업무');
     setIsRepeating(false);
     setRepeatType('none');
-    setRepeatInterval(1);
+    setRepeatInterval('1');
     setRepeatEndDate('');
     setNotificationTime(10);
   };
@@ -121,7 +138,7 @@ export const useEventForm = (initialEvent?: Event) => {
     setCategory(event.category);
     setIsRepeating(event.repeat.type !== 'none');
     setRepeatType(event.repeat.type);
-    setRepeatInterval(event.repeat.interval);
+    setRepeatInterval(String(event.repeat.interval));
     setRepeatEndDate(event.repeat.endDate || '');
     setNotificationTime(event.notificationTime);
   };
@@ -135,9 +152,11 @@ export const useEventForm = (initialEvent?: Event) => {
       };
     }
 
+    const intervalNum = Math.floor(Number(repeatInterval));
+
     return {
       type: repeatType,
-      interval: repeatInterval,
+      interval: Number.isFinite(intervalNum) && intervalNum >= 1 ? intervalNum : 1,
       endDate: repeatEndDate || undefined,
     };
   };
