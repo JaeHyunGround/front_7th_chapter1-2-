@@ -167,6 +167,17 @@ function App() {
   const expandAndFilter = (sourceEvents: Event[], rangeStart: Date, rangeEnd: Date): Event[] =>
     filterNotDeleted(expandEventsForRange(sourceEvents, rangeStart, rangeEnd));
 
+  const handleDeleteClick = (event: Event) => {
+    if (isRepeatingType(event.repeat.type)) {
+      setPendingDeleteEvent(event);
+      return;
+    }
+    // 비반복: 즉시 삭제 + 로컬 리스트 반영 + 검색 입력 포커스 이동
+    setDeletedEventIds((prev) => new Set(prev).add(event.id));
+    deleteEvent(event.id);
+    searchInputRef.current?.focus();
+  };
+
   const handleConfirmDeleteSingle = async () => {
     const target = pendingDeleteEvent;
     setPendingDeleteEvent(null);
@@ -786,20 +797,7 @@ function App() {
                     <IconButton aria-label="Edit event" onClick={() => editEvent(event)}>
                       <Edit />
                     </IconButton>
-                    <IconButton
-                      aria-label="Delete event"
-                      onClick={() => {
-                        if (isRepeatingType(event.repeat.type)) {
-                          setPendingDeleteEvent(event);
-                          return;
-                        }
-                        // 비반복: 즉시 삭제 + 로컬 리스트 반영
-                        setDeletedEventIds((prev) => new Set(prev).add(event.id));
-                        deleteEvent(event.id);
-                        // 삭제 후 검색 입력으로 포커스 이동
-                        searchInputRef.current?.focus();
-                      }}
-                    >
+                    <IconButton aria-label="Delete event" onClick={() => handleDeleteClick(event)}>
                       <Delete />
                     </IconButton>
                   </Stack>
