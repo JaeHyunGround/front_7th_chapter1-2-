@@ -150,6 +150,23 @@ function App() {
 
   const isRepeatingType = (type: RepeatType) => type !== 'none';
 
+  const saveCurrentAsSingleInstance = async () => {
+    setIsEditConfirmOpen(false);
+    if (!editingEvent) return;
+    await saveEvent({
+      id: editingEvent.id,
+      title,
+      date,
+      startTime,
+      endTime,
+      description,
+      location,
+      category,
+      repeat: { type: 'none', interval: 1 },
+      notificationTime,
+    });
+  };
+
   const addOrUpdateEvent = async () => {
     if (!title || !date || !startTime || !endTime) {
       enqueueSnackbar('필수 정보를 모두 입력해주세요.', { variant: 'error' });
@@ -708,25 +725,7 @@ function App() {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button
-            onClick={async () => {
-              // 단일 수정: 현재 편집 중 이벤트를 반복 없음으로 업데이트
-              setIsEditConfirmOpen(false);
-              if (!editingEvent) return;
-              await saveEvent({
-                id: editingEvent.id,
-                title,
-                date,
-                startTime,
-                endTime,
-                description,
-                location,
-                category,
-                repeat: { type: 'none', interval: 1 },
-                notificationTime,
-              });
-            }}
-          >
+          <Button onClick={saveCurrentAsSingleInstance}>
             예
           </Button>
           <Button onClick={() => setIsEditConfirmOpen(false)}>아니오</Button>
