@@ -87,9 +87,9 @@ export const useEventForm = (initialEvent?: Event) => {
     // 시작일과의 관계 검증 (종료일은 시작일 이상)
     if (date) {
       const start = new Date(date);
-      // 날짜만 비교
-      const startOnly = new Date(start.getFullYear(), start.getMonth(), start.getDate());
-      const endOnly = new Date(end.getFullYear(), end.getMonth(), end.getDate());
+      const normalizeDateOnly = (d: Date) => new Date(d.getFullYear(), d.getMonth(), d.getDate());
+      const startOnly = normalizeDateOnly(start);
+      const endOnly = normalizeDateOnly(end);
       if (endOnly < startOnly) {
         return '종료일은 시작일보다 미래여야 합니다.';
       }
