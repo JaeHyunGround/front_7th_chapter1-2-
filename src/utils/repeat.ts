@@ -52,7 +52,10 @@ function generateDaily(event: Event, rangeStart: Date, rangeEnd: Date): Event[] 
 
   for (let d = start; d <= until && d <= rangeEnd; d = addDays(d, interval)) {
     if (d < rangeStart) continue;
-    occurrences.push({ ...event, id: `${event.id || 'new'}@${formatISODate(d)}`, date: formatISODate(d) });
+    const dateStr = formatISODate(d);
+    const exceptions = (event.repeat as any).exceptions as string[] | undefined;
+    if (exceptions && exceptions.includes(dateStr)) continue;
+    occurrences.push({ ...event, id: `${event.id || 'new'}@${dateStr}`, date: dateStr });
   }
   return occurrences;
 }
@@ -70,7 +73,10 @@ function generateWeekly(event: Event, rangeStart: Date, rangeEnd: Date): Event[]
   for (let d = start; d <= until && d <= rangeEnd; d = addDays(d, intervalWeeks * 7)) {
     if (d < rangeStart) continue;
     if (d.getDay() === startDow) {
-      occurrences.push({ ...event, id: `${event.id || 'new'}@${formatISODate(d)}`, date: formatISODate(d) });
+      const dateStr = formatISODate(d);
+      const exceptions = (event.repeat as any).exceptions as string[] | undefined;
+      if (exceptions && exceptions.includes(dateStr)) continue;
+      occurrences.push({ ...event, id: `${event.id || 'new'}@${dateStr}`, date: dateStr });
     }
   }
   return occurrences;
@@ -89,10 +95,13 @@ function generateMonthly(event: Event, rangeStart: Date, rangeEnd: Date): Event[
     if (!monthHasDay(d, day)) continue; // skip months without the day (29/30/31 handled implicitly)
     const occurrenceDate = new Date(d.getFullYear(), d.getMonth(), day);
     if (occurrenceDate < rangeStart) continue;
+    const dateStr = formatISODate(occurrenceDate);
+    const exceptions = (event.repeat as any).exceptions as string[] | undefined;
+    if (exceptions && exceptions.includes(dateStr)) continue;
     occurrences.push({
       ...event,
-      id: `${event.id || 'new'}@${formatISODate(occurrenceDate)}`,
-      date: formatISODate(occurrenceDate),
+      id: `${event.id || 'new'}@${dateStr}`,
+      date: dateStr,
     });
   }
   return occurrences;
@@ -116,10 +125,13 @@ function generateYearly(event: Event, rangeStart: Date, rangeEnd: Date): Event[]
     if (day > dim) continue;
     const occurrenceDate = new Date(y, month, day);
     if (occurrenceDate < rangeStart) continue;
+    const dateStr = formatISODate(occurrenceDate);
+    const exceptions = (event.repeat as any).exceptions as string[] | undefined;
+    if (exceptions && exceptions.includes(dateStr)) continue;
     occurrences.push({
       ...event,
-      id: `${event.id || 'new'}@${formatISODate(occurrenceDate)}`,
-      date: formatISODate(occurrenceDate),
+      id: `${event.id || 'new'}@${dateStr}`,
+      date: dateStr,
     });
   }
   return occurrences;
