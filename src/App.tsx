@@ -176,6 +176,14 @@ function App() {
     await saveEvent(buildEventPayload());
   };
 
+  const cancelEditAndRestoreForm = () => {
+    setIsEditConfirmOpen(false);
+    if (editingEvent) {
+      setTitle(editingEvent.title);
+      // 필요 시 다른 필드 복원 확장 가능
+    }
+  };
+
   const addOrUpdateEvent = async () => {
     if (!title || !date || !startTime || !endTime) {
       enqueueSnackbar('필수 정보를 모두 입력해주세요.', { variant: 'error' });
@@ -740,7 +748,7 @@ function App() {
           <Button onClick={saveSeriesEdit}>
             아니오
           </Button>
-          <Button onClick={() => setIsEditConfirmOpen(false)}>취소</Button>
+          <Button onClick={cancelEditAndRestoreForm}>취소</Button>
         </DialogActions>
       </Dialog>
 
