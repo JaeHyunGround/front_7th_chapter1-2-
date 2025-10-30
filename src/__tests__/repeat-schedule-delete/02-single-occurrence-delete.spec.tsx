@@ -5,8 +5,9 @@ import { userEvent } from '@testing-library/user-event';
 import { SnackbarProvider } from 'notistack';
 import { http, HttpResponse } from 'msw';
 
-import { server } from '../../setupTests';
 import App from '../../App';
+import { server } from '../../setupTests';
+import { Event } from '../../types';
 
 const theme = createTheme();
 
@@ -26,9 +27,15 @@ const setup = () => {
   };
 };
 
+type PutRecurringBody = {
+  repeat?: {
+    exceptions?: string[];
+  };
+};
+
 describe('[Story] 단일 인스턴스 삭제(예) - 예외 처리', () => {
-  it("'예' 선택 시 해당 인스턴스만 예외 처리되고 성공 토스트가 노출된다 (Red)", async () => {
-    const mockEvent: any = {
+  it("'예' 선택 시 기존 exceptions에 선택 날짜가 병합되어 전송되고, 성공 토스트 및 리스트 반영 (Red)", async () => {
+    const mockEvent: Event = {
       id: '1',
       title: '주간 회의',
       date: '2025-11-05',
@@ -37,7 +44,7 @@ describe('[Story] 단일 인스턴스 삭제(예) - 예외 처리', () => {
       description: '',
       location: '',
       category: '업무',
-      repeat: { type: 'weekly', interval: 1, id: 'r-123' },
+      repeat: { type: 'weekly', interval: 1, id: 'r-123', exceptions: ['2025-11-12'] },
       notificationTime: 10,
     };
 
@@ -46,11 +53,15 @@ describe('[Story] 단일 인스턴스 삭제(예) - 예외 처리', () => {
         return HttpResponse.json({ events: [mockEvent] });
       }),
       http.put('/api/recurring-events/:repeatId', async ({ params, request }) => {
-        const { repeatId } = params as { repeatId: string };
-        const body = (await request.json()) as any;
-        // 기대: 예외 날짜가 포함되어야 함
+        const { repeatId } = params as Record<string, string>;
+        const body = (await request.json()) as PutRecurringBody;
+
         expect(repeatId).toBe('r-123');
-        expect(body?.repeat?.exceptions).toContain('2025-11-05');
+        // Red 조건: 기존 '2025-11-12'와 신규 '2025-11-05'가 모두 포함되어야 함(중복 없이)
+        const exceptions = body.repeat?.exceptions ?? [];
+        expect(exceptions).toEqual(expect.arrayContaining(['2025-11-12', '2025-11-05']));
+        expect(new Set(exceptions).size).toBe(exceptions.length);
+
         return HttpResponse.json({}, { status: 200 });
       })
     );
@@ -63,9 +74,8 @@ describe('[Story] 단일 인스턴스 삭제(예) - 예외 처리', () => {
     expect(await screen.findByText('해당 일정만 삭제하시겠어요?')).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: '예' }));
 
-    // Red: 현재 구현에서는 예외 처리/토스트가 없어 실패해야 함
+    // 이후 기대: 성공 토스트, 리스트에서 제목 미노출
     expect(await screen.findByText('일정이 삭제되었습니다.')).toBeInTheDocument();
-
     const list = screen.getByTestId('event-list');
     expect(within(list).queryByText('주간 회의')).toBeNull();
   });
