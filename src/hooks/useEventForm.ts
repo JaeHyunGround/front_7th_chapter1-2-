@@ -13,7 +13,9 @@ export const useEventForm = (initialEvent?: Event) => {
   const [description, setDescription] = useState(initialEvent?.description || '');
   const [location, setLocation] = useState(initialEvent?.location || '');
   const [category, setCategory] = useState(initialEvent?.category || '업무');
-  const [isRepeating, setIsRepeating] = useState(initialEvent?.repeat.type !== 'none');
+  const [isRepeating, setIsRepeatingState] = useState(
+    initialEvent ? initialEvent.repeat.type !== 'none' : false
+  );
   const [repeatType, setRepeatType] = useState<RepeatType>(initialEvent?.repeat.type || 'none');
   const [repeatInterval, setRepeatInterval] = useState(initialEvent?.repeat.interval || 1);
   const [repeatEndDate, setRepeatEndDate] = useState(initialEvent?.repeat.endDate || '');
@@ -67,6 +69,19 @@ export const useEventForm = (initialEvent?: Event) => {
 
     return null;
   }, [isRepeating, repeatEndDate]);
+
+  const setIsRepeating = (value: boolean) => {
+    setIsRepeatingState(value);
+
+    if (!value) {
+      setRepeatType('none');
+      return;
+    }
+
+    if (repeatType === 'none') {
+      setRepeatType('daily');
+    }
+  };
 
   const handleStartTimeChange = (e: ChangeEvent<HTMLInputElement>) => {
     const newStartTime = e.target.value;
