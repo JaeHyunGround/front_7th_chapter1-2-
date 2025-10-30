@@ -123,5 +123,3 @@ describe('[Story] 반복 아이콘 접근성 및 툴팁', () => {
     expect(await screen.findByText('반복 일정')).toBeInTheDocument();
   });
 });
-
-
