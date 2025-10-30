@@ -70,7 +70,11 @@ const getBaseEventId = (eventId: string | undefined) => (eventId || '').split('@
 
 const RepeatIndicator = ({ repeat }: { repeat: Event['repeat'] }) => {
   if (repeat.type === 'none') return null;
-  return <Repeat fontSize="small" data-testid="repeat-icon" aria-label="반복 일정" />;
+  return (
+    <Tooltip title="반복 일정">
+      <Repeat fontSize="small" data-testid="repeat-icon" aria-label="반복 일정" />
+    </Tooltip>
+  );
 };
 
 function App() {
