@@ -728,7 +728,26 @@ function App() {
           <Button onClick={saveCurrentAsSingleInstance}>
             예
           </Button>
-          <Button onClick={() => setIsEditConfirmOpen(false)}>아니오</Button>
+          <Button
+            onClick={async () => {
+              // 전체 수정: 반복 속성 유지한 채로 저장
+              setIsEditConfirmOpen(false);
+              await saveEvent({
+                id: editingEvent ? editingEvent.id : undefined,
+                title,
+                date,
+                startTime,
+                endTime,
+                description,
+                location,
+                category,
+                repeat: getRepeatInfo(),
+                notificationTime,
+              });
+            }}
+          >
+            아니오
+          </Button>
           <Button onClick={() => setIsEditConfirmOpen(false)}>취소</Button>
         </DialogActions>
       </Dialog>
