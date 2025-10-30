@@ -50,7 +50,9 @@ describe('매년 반복 생성 - 일반 케이스', () => {
     for (let i = 0; i < 9; i++) await user.click(screen.getByLabelText('Previous'));
 
     const monthViewJan = await screen.findByTestId('month-view');
-    expect((await within(monthViewJan).findAllByText('매년 1월15일 테스트')).length).toBeGreaterThanOrEqual(1);
+    expect(
+      (await within(monthViewJan).findAllByText('매년 1월15일 테스트')).length
+    ).toBeGreaterThanOrEqual(1);
   });
 
   it('간격 2로 매년 1월 15일: 2025/2027에서 각각 표시됨', async () => {
@@ -88,11 +90,15 @@ describe('매년 반복 생성 - 일반 케이스', () => {
     await user.click(screen.getByRole('option', { name: /month/i }));
     for (let i = 0; i < 9; i++) await user.click(screen.getByLabelText('Previous'));
     const monthView2025Jan = await screen.findByTestId('month-view');
-    expect((await within(monthView2025Jan).findAllByText('2년마다 1월15일')).length).toBeGreaterThanOrEqual(1);
+    expect(
+      (await within(monthView2025Jan).findAllByText('2년마다 1월15일')).length
+    ).toBeGreaterThanOrEqual(1);
 
     // 2027-01로 이동 (Next 24회)
     for (let i = 0; i < 24; i++) await user.click(screen.getByLabelText('Next'));
     const monthView2027Jan = await screen.findByTestId('month-view');
-    expect((await within(monthView2027Jan).findAllByText('2년마다 1월15일')).length).toBeGreaterThanOrEqual(1);
+    expect(
+      (await within(monthView2027Jan).findAllByText('2년마다 1월15일')).length
+    ).toBeGreaterThanOrEqual(1);
   });
 });

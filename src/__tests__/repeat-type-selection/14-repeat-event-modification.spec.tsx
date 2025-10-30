@@ -26,7 +26,7 @@ const setup = () => {
 };
 
 describe('반복 일정 수정', () => {
-  it("편집 폼에서 반복 유형/간격/종료일을 변경할 수 있다 (weekly → monthly)", async () => {
+  it('편집 폼에서 반복 유형/간격/종료일을 변경할 수 있다 (weekly → monthly)', async () => {
     setupMockHandlerUpdating();
     const { user } = setup();
 

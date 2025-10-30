@@ -31,7 +31,9 @@ describe('반복 종료일 입력 검증', () => {
     await user.click(screen.getByRole('checkbox', { name: /반복 일정/i }));
 
     // 종료일 미입력 상태에서 오류가 없어야 함
-    expect(screen.queryByText('날짜 형식이 올바르지 않습니다. (YYYY-MM-DD)')).not.toBeInTheDocument();
+    expect(
+      screen.queryByText('날짜 형식이 올바르지 않습니다. (YYYY-MM-DD)')
+    ).not.toBeInTheDocument();
     expect(screen.queryByText('유효하지 않은 날짜입니다.')).not.toBeInTheDocument();
     expect(screen.queryByText('종료일은 시작일보다 미래여야 합니다.')).not.toBeInTheDocument();
   });
@@ -46,7 +48,9 @@ describe('반복 종료일 입력 검증', () => {
     await user.clear(endDateInput);
     await user.type(endDateInput, '2024-12-31');
 
-    expect(screen.queryByText('날짜 형식이 올바르지 않습니다. (YYYY-MM-DD)')).not.toBeInTheDocument();
+    expect(
+      screen.queryByText('날짜 형식이 올바르지 않습니다. (YYYY-MM-DD)')
+    ).not.toBeInTheDocument();
     expect(screen.queryByText('유효하지 않은 날짜입니다.')).not.toBeInTheDocument();
     expect(screen.queryByText('종료일은 시작일보다 미래여야 합니다.')).not.toBeInTheDocument();
   });

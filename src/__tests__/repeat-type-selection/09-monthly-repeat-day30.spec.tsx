@@ -63,12 +63,16 @@ describe('매월 반복 생성 - 30일 특수 케이스', () => {
     await user.click(screen.getByRole('option', { name: /month/i }));
 
     const monthViewOct = await screen.findByTestId('month-view');
-    expect((await within(monthViewOct).findAllByText('30일 반복 테스트')).length).toBeGreaterThanOrEqual(1);
+    expect(
+      (await within(monthViewOct).findAllByText('30일 반복 테스트')).length
+    ).toBeGreaterThanOrEqual(1);
 
     // 11월 표시 확인
     await user.click(screen.getByLabelText('Next'));
     const monthViewNov = await screen.findByTestId('month-view');
-    expect((await within(monthViewNov).findAllByText('30일 반복 테스트')).length).toBeGreaterThanOrEqual(1);
+    expect(
+      (await within(monthViewNov).findAllByText('30일 반복 테스트')).length
+    ).toBeGreaterThanOrEqual(1);
 
     // 12월 → 1월 → 2월 이동 후 2월에는 표시되지 않음
     await user.click(screen.getByLabelText('Next'));

@@ -54,7 +54,9 @@ describe('매월 반복 생성 - 29일 특수 케이스', () => {
       await user.click(screen.getByLabelText('Previous'));
     }
     const monthViewLeapFeb = await screen.findByTestId('month-view');
-    expect((await within(monthViewLeapFeb).findAllByText('29일 반복 테스트')).length).toBeGreaterThanOrEqual(1);
+    expect(
+      (await within(monthViewLeapFeb).findAllByText('29일 반복 테스트')).length
+    ).toBeGreaterThanOrEqual(1);
 
     // 평년 2025-02로 이동 (Next 12회: 2024-02 → 2025-02)
     for (let i = 0; i < 12; i++) {

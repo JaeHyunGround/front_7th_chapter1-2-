@@ -64,7 +64,9 @@ describe('매월 반복 생성 - 31일 특수 케이스', () => {
 
     // 10월(31일 있음) → 표시됨
     const monthViewOct = await screen.findByTestId('month-view');
-    expect((await within(monthViewOct).findAllByText('31일 반복 테스트')).length).toBeGreaterThanOrEqual(1);
+    expect(
+      (await within(monthViewOct).findAllByText('31일 반복 테스트')).length
+    ).toBeGreaterThanOrEqual(1);
 
     // 11월(31일 없음) → 표시되지 않음
     await user.click(screen.getByLabelText('Next'));
@@ -74,6 +76,8 @@ describe('매월 반복 생성 - 31일 특수 케이스', () => {
     // 12월(31일 있음) → 표시됨
     await user.click(screen.getByLabelText('Next'));
     const monthViewDec = await screen.findByTestId('month-view');
-    expect((await within(monthViewDec).findAllByText('31일 반복 테스트')).length).toBeGreaterThanOrEqual(1);
+    expect(
+      (await within(monthViewDec).findAllByText('31일 반복 테스트')).length
+    ).toBeGreaterThanOrEqual(1);
   });
 });
