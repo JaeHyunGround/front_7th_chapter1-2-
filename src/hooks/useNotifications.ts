@@ -27,6 +27,8 @@ export const useNotifications = (events: Event[]) => {
   };
 
   useEffect(() => {
+    // 마운트/이벤트 변경 시 즉시 1회 체크하여 아이콘 표시 지연 최소화
+    checkUpcomingEvents();
     const interval = setInterval(checkUpcomingEvents, 1000); // 1초마다 체크
     return () => clearInterval(interval);
   }, [events, notifiedEvents]);
