@@ -708,7 +708,27 @@ function App() {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setIsEditConfirmOpen(false)}>예</Button>
+          <Button
+            onClick={async () => {
+              // 단일 수정: 현재 편집 중 이벤트를 반복 없음으로 업데이트
+              setIsEditConfirmOpen(false);
+              if (!editingEvent) return;
+              await saveEvent({
+                id: editingEvent.id,
+                title,
+                date,
+                startTime,
+                endTime,
+                description,
+                location,
+                category,
+                repeat: { type: 'none', interval: 1 },
+                notificationTime,
+              });
+            }}
+          >
+            예
+          </Button>
           <Button onClick={() => setIsEditConfirmOpen(false)}>아니오</Button>
           <Button onClick={() => setIsEditConfirmOpen(false)}>취소</Button>
         </DialogActions>
