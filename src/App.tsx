@@ -66,6 +66,8 @@ const notificationOptions = [
   { value: 1440, label: '1일 전' },
 ];
 
+const getBaseEventId = (eventId: string | undefined) => (eventId || '').split('@')[0];
+
 const RepeatIndicator = ({ repeat }: { repeat: Event['repeat'] }) => {
   if (repeat.type === 'none') return null;
   return <Repeat fontSize="small" data-testid="repeat-icon" aria-label="반복 일정" />;
@@ -214,7 +216,7 @@ function App() {
                         (event) => new Date(event.date).toDateString() === date.toDateString()
                       )
                       .map((event) => {
-                        const baseId = (event.id || '').split('@')[0];
+                        const baseId = getBaseEventId(event.id);
                         const isNotified = notifiedEvents.includes(baseId);
                         return (
                           <Box
@@ -306,7 +308,7 @@ function App() {
                               </Typography>
                             )}
                             {getEventsForDay(displayedEvents, day).map((event) => {
-                              const baseId = (event.id || '').split('@')[0];
+                              const baseId = getBaseEventId(event.id);
                               const isNotified = notifiedEvents.includes(baseId);
                               return (
                                 <Box
