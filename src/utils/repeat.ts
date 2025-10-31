@@ -49,12 +49,12 @@ function generateDaily(event: Event, rangeStart: Date, rangeEnd: Date): Event[] 
   const until = event.repeat.endDate
     ? toDateOnly(new Date(event.repeat.endDate))
     : rangeEnd;
+  const exceptionsSet = new Set((event.repeat.exceptions ?? []).map((s) => s.trim()));
 
   for (let d = start; d <= until && d <= rangeEnd; d = addDays(d, interval)) {
     if (d < rangeStart) continue;
     const dateStr = formatISODate(d);
-    const exceptions = event.repeat.exceptions;
-    if (exceptions && exceptions.includes(dateStr)) continue;
+    if (exceptionsSet.has(dateStr)) continue;
     occurrences.push({ ...event, id: `${event.id || 'new'}@${dateStr}`, date: dateStr });
   }
   return occurrences;
@@ -68,14 +68,14 @@ function generateWeekly(event: Event, rangeStart: Date, rangeEnd: Date): Event[]
   const until = event.repeat.endDate
     ? toDateOnly(new Date(event.repeat.endDate))
     : rangeEnd;
+  const exceptionsSet = new Set((event.repeat.exceptions ?? []).map((s) => s.trim()));
 
   // Align to first occurrence (start itself)
   for (let d = start; d <= until && d <= rangeEnd; d = addDays(d, intervalWeeks * 7)) {
     if (d < rangeStart) continue;
     if (d.getDay() === startDow) {
       const dateStr = formatISODate(d);
-      const exceptions = event.repeat.exceptions;
-      if (exceptions && exceptions.includes(dateStr)) continue;
+      if (exceptionsSet.has(dateStr)) continue;
       occurrences.push({ ...event, id: `${event.id || 'new'}@${dateStr}`, date: dateStr });
     }
   }
@@ -90,14 +90,14 @@ function generateMonthly(event: Event, rangeStart: Date, rangeEnd: Date): Event[
   const until = event.repeat.endDate
     ? toDateOnly(new Date(event.repeat.endDate))
     : rangeEnd;
+  const exceptionsSet = new Set((event.repeat.exceptions ?? []).map((s) => s.trim()));
 
   for (let d = new Date(start); d <= until && d <= rangeEnd; d = addMonths(d, intervalMonths)) {
     if (!monthHasDay(d, day)) continue; // skip months without the day (29/30/31 handled implicitly)
     const occurrenceDate = new Date(d.getFullYear(), d.getMonth(), day);
     if (occurrenceDate < rangeStart) continue;
     const dateStr = formatISODate(occurrenceDate);
-    const exceptions = event.repeat.exceptions;
-    if (exceptions && exceptions.includes(dateStr)) continue;
+    if (exceptionsSet.has(dateStr)) continue;
     occurrences.push({
       ...event,
       id: `${event.id || 'new'}@${dateStr}`,
@@ -116,6 +116,7 @@ function generateYearly(event: Event, rangeStart: Date, rangeEnd: Date): Event[]
   const until = event.repeat.endDate
     ? toDateOnly(new Date(event.repeat.endDate))
     : rangeEnd;
+  const exceptionsSet = new Set((event.repeat.exceptions ?? []).map((s) => s.trim()));
 
   for (let d = new Date(start); d <= until && d <= rangeEnd; d = addYears(d, intervalYears)) {
     const y = d.getFullYear();
@@ -126,8 +127,7 @@ function generateYearly(event: Event, rangeStart: Date, rangeEnd: Date): Event[]
     const occurrenceDate = new Date(y, month, day);
     if (occurrenceDate < rangeStart) continue;
     const dateStr = formatISODate(occurrenceDate);
-    const exceptions = event.repeat.exceptions;
-    if (exceptions && exceptions.includes(dateStr)) continue;
+    if (exceptionsSet.has(dateStr)) continue;
     occurrences.push({
       ...event,
       id: `${event.id || 'new'}@${dateStr}`,
