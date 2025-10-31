@@ -59,6 +59,23 @@
       "category": "개인",
       "repeat": { "type": "none", "interval": 0 },
       "notificationTime": 1
+    },
+    {
+      "id": "a5cb3d73-53a6-4b0e-ac9a-11297951adb4",
+      "title": "1",
+      "date": "2025-10-31",
+      "startTime": "10:59",
+      "endTime": "22:58",
+      "description": "1",
+      "location": "1",
+      "category": "업무",
+      "repeat": {
+        "type": "daily",
+        "interval": 1,
+        "id": "3b9b9fbd-c597-4ba9-991a-30c31979eb87",
+        "exceptions": ["2025-10-31"]
+      },
+      "notificationTime": 10
     }
   ]
 }
