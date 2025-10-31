@@ -150,7 +150,8 @@ describe('일정 뷰', () => {
   });
 
   it('월별 뷰에 일정이 없으면, 일정이 표시되지 않아야 한다.', async () => {
-    vi.setSystemTime(new Date('2025-01-01'));
+    setupMockHandlerCreation();
+    vi.setSystemTime(new Date('2025-04-11'));
 
     setup(<App />);
 
