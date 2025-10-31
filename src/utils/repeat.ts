@@ -46,9 +46,7 @@ function generateDaily(event: Event, rangeStart: Date, rangeEnd: Date): Event[] 
   const occurrences: Event[] = [];
   const interval = Math.max(1, event.repeat.interval);
   const start = toDateOnly(new Date(event.date));
-  const until = event.repeat.endDate
-    ? toDateOnly(new Date(event.repeat.endDate))
-    : rangeEnd;
+  const until = event.repeat.endDate ? toDateOnly(new Date(event.repeat.endDate)) : rangeEnd;
   const exceptionsSet = new Set((event.repeat.exceptions ?? []).map((s) => s.trim()));
 
   for (let d = start; d <= until && d <= rangeEnd; d = addDays(d, interval)) {
@@ -65,9 +63,7 @@ function generateWeekly(event: Event, rangeStart: Date, rangeEnd: Date): Event[]
   const intervalWeeks = Math.max(1, event.repeat.interval);
   const start = toDateOnly(new Date(event.date));
   const startDow = start.getDay();
-  const until = event.repeat.endDate
-    ? toDateOnly(new Date(event.repeat.endDate))
-    : rangeEnd;
+  const until = event.repeat.endDate ? toDateOnly(new Date(event.repeat.endDate)) : rangeEnd;
   const exceptionsSet = new Set((event.repeat.exceptions ?? []).map((s) => s.trim()));
 
   // Align to first occurrence (start itself)
@@ -87,9 +83,7 @@ function generateMonthly(event: Event, rangeStart: Date, rangeEnd: Date): Event[
   const intervalMonths = Math.max(1, event.repeat.interval);
   const start = toDateOnly(new Date(event.date));
   const day = start.getDate();
-  const until = event.repeat.endDate
-    ? toDateOnly(new Date(event.repeat.endDate))
-    : rangeEnd;
+  const until = event.repeat.endDate ? toDateOnly(new Date(event.repeat.endDate)) : rangeEnd;
   const exceptionsSet = new Set((event.repeat.exceptions ?? []).map((s) => s.trim()));
 
   for (let d = new Date(start); d <= until && d <= rangeEnd; d = addMonths(d, intervalMonths)) {
@@ -113,9 +107,7 @@ function generateYearly(event: Event, rangeStart: Date, rangeEnd: Date): Event[]
   const start = toDateOnly(new Date(event.date));
   const month = start.getMonth();
   const day = start.getDate();
-  const until = event.repeat.endDate
-    ? toDateOnly(new Date(event.repeat.endDate))
-    : rangeEnd;
+  const until = event.repeat.endDate ? toDateOnly(new Date(event.repeat.endDate)) : rangeEnd;
   const exceptionsSet = new Set((event.repeat.exceptions ?? []).map((s) => s.trim()));
 
   for (let d = new Date(start); d <= until && d <= rangeEnd; d = addYears(d, intervalYears)) {
@@ -137,11 +129,7 @@ function generateYearly(event: Event, rangeStart: Date, rangeEnd: Date): Event[]
   return occurrences;
 }
 
-export function expandEventsForRange(
-  events: Event[],
-  rangeStart: Date,
-  rangeEnd: Date
-): Event[] {
+export function expandEventsForRange(events: Event[], rangeStart: Date, rangeEnd: Date): Event[] {
   const expanded: Event[] = [];
   for (const event of events) {
     if (event.repeat?.type && event.repeat.type !== 'none') {
@@ -164,5 +152,3 @@ export function expandEventsForRange(
   }
   return expanded;
 }
-
-
