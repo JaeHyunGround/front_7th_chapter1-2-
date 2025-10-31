@@ -1,7 +1,9 @@
 import { http, HttpResponse } from 'msw';
 
-import { events } from '../__mocks__/response/events.json' assert { type: 'json' };
 import { Event } from '../types';
+import eventsData from './response/events.json';
+
+const { events } = eventsData;
 
 // 반복 일정 시리즈를 메모리에 저장
 const recurringSeriesStore = new Map<string, Event['repeat']>();
