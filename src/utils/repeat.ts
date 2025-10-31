@@ -27,6 +27,10 @@ const formatISODate = (d: Date) => {
   return `${y}-${m}-${day}`;
 };
 
+function getExceptionsSet(repeat: Event['repeat']): Set<string> {
+  return new Set((repeat.exceptions ?? []).map((s) => s.trim()));
+}
+
 const isLeapYear = (year: number): boolean => {
   if (year % 400 === 0) return true;
   if (year % 100 === 0) return false;
@@ -47,7 +51,7 @@ function generateDaily(event: Event, rangeStart: Date, rangeEnd: Date): Event[] 
   const interval = Math.max(1, event.repeat.interval);
   const start = toDateOnly(new Date(event.date));
   const until = event.repeat.endDate ? toDateOnly(new Date(event.repeat.endDate)) : rangeEnd;
-  const exceptionsSet = new Set((event.repeat.exceptions ?? []).map((s) => s.trim()));
+  const exceptionsSet = getExceptionsSet(event.repeat);
 
   for (let d = start; d <= until && d <= rangeEnd; d = addDays(d, interval)) {
     if (d < rangeStart) continue;
@@ -64,7 +68,7 @@ function generateWeekly(event: Event, rangeStart: Date, rangeEnd: Date): Event[]
   const start = toDateOnly(new Date(event.date));
   const startDow = start.getDay();
   const until = event.repeat.endDate ? toDateOnly(new Date(event.repeat.endDate)) : rangeEnd;
-  const exceptionsSet = new Set((event.repeat.exceptions ?? []).map((s) => s.trim()));
+  const exceptionsSet = getExceptionsSet(event.repeat);
 
   // Align to first occurrence (start itself)
   for (let d = start; d <= until && d <= rangeEnd; d = addDays(d, intervalWeeks * 7)) {
@@ -84,7 +88,7 @@ function generateMonthly(event: Event, rangeStart: Date, rangeEnd: Date): Event[
   const start = toDateOnly(new Date(event.date));
   const day = start.getDate();
   const until = event.repeat.endDate ? toDateOnly(new Date(event.repeat.endDate)) : rangeEnd;
-  const exceptionsSet = new Set((event.repeat.exceptions ?? []).map((s) => s.trim()));
+  const exceptionsSet = getExceptionsSet(event.repeat);
 
   for (let d = new Date(start); d <= until && d <= rangeEnd; d = addMonths(d, intervalMonths)) {
     if (!monthHasDay(d, day)) continue; // skip months without the day (29/30/31 handled implicitly)
@@ -108,7 +112,7 @@ function generateYearly(event: Event, rangeStart: Date, rangeEnd: Date): Event[]
   const month = start.getMonth();
   const day = start.getDate();
   const until = event.repeat.endDate ? toDateOnly(new Date(event.repeat.endDate)) : rangeEnd;
-  const exceptionsSet = new Set((event.repeat.exceptions ?? []).map((s) => s.trim()));
+  const exceptionsSet = getExceptionsSet(event.repeat);
 
   for (let d = new Date(start); d <= until && d <= rangeEnd; d = addYears(d, intervalYears)) {
     const y = d.getFullYear();
